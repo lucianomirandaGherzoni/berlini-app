@@ -774,7 +774,7 @@ textarea {
 
 .fondo-crud{
   background-image: url('./img/banner-portada.png');
-  min-height: 100vhd;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
