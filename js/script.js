@@ -8,8 +8,7 @@ const CONFIG = {
   ADMIN_PASSWORD: "admin123",
 }
 
-// Elementos del DOM (Document Object Model)
-// Se obtienen referencias a los elementos HTML con los que el script interactuará.
+// Elementos del DOM 
 const listaProductos = document.getElementById("grilla-productos") // Contenedor de la lista de productos en la página principal
 const productoModal = document.getElementById("productoModal") // Modal para crear/editar productos
 const confirmarEliminarModal = document.getElementById("confirmarEliminarModal") // Modal de confirmación de eliminación
@@ -100,20 +99,28 @@ function actualizarContadorCarrito() {
 // Abre un modal específico.
 function abrirModal(idModal) {
   const modal = document.getElementById(idModal)
-  if (modal) modal.style.display = "flex" // Cambia el estilo para hacerlo visible
+  if (modal) {
+    modal.style.display = "flex" // Cambia el estilo para hacerlo visible
+    document.body.style.overflow = "hidden" // Desactiva el desplazamiento del cuerpo
+  }
+
 }
 
 // Cierra un modal específico.
 function cerrarModal(idModal) {
   const modal = document.getElementById(idModal)
-  if (modal) modal.style.display = "none" // Cambia el estilo para ocultarlo
+  if (modal){
+    modal.style.display = "none" // Cambia el estilo para ocultarlo
+    document.body.style.overflow = "auto";
+  } 
+
 }
 
 // Cierra todos los modales y limpia los campos del formulario de producto.
 function cerrarYLimpiarModales() {
   if (productoModal) productoModal.style.display = "none"
   if (confirmarEliminarModal) confirmarEliminarModal.style.display = "none"
-
+   document.body.style.overflow = "auto";
   // Limpiar campos del formulario
   if (inputId) inputId.value = ""
   if (inputDetalle) inputDetalle.value = ""
@@ -332,7 +339,7 @@ async function eliminarProductoAPI(id) {
 
 // Crea y retorna un elemento de tarjeta de producto para la visualización en la página principal.
 function crearTarjetaProducto(producto) {
-    // Si el stock es 0, no creamos la tarjeta.
+  // Si el stock es 0, no creamos la tarjeta.
   if (producto.stock === 0) {
     return null; // O podrías retornar undefined, lo importante es que no sea un elemento DOM
   }
@@ -362,12 +369,12 @@ async function renderizarProductos() {
   listaProductos.innerHTML = "" // Limpia el contenedor
   if (productosAPI && productosAPI.length > 0) {
     productosAPI.forEach((producto) => {
-        const card = crearTarjetaProducto(producto)
-        if(card){
-          listaProductos.appendChild(card) // Añade cada producto como una tarjeta
-        }
-        
-      
+      const card = crearTarjetaProducto(producto)
+      if (card) {
+        listaProductos.appendChild(card) // Añade cada producto como una tarjeta
+      }
+
+
     })
   } else {
     listaProductos.innerHTML =
@@ -697,10 +704,8 @@ async function renderizarProductosAdmin() {
 
     const fila = document.createElement("tr")
     fila.innerHTML = `
-          <td>${displayId}</td>
           <td><img src="${producto.imagen_url || "/placeholder.svg?height=50&width=50"}" alt="${producto.nombre}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.375rem;"></td>
           <td style="font-weight:500;">${producto.nombre}</td>
-          <td>${producto.detalle}</td>
           <td class="texto-derecha">$${producto.precio.toFixed(2)}</td>
           <td class="texto-derecha">${producto.stock}</td>
           <td class="acciones">

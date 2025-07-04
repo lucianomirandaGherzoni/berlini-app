@@ -498,6 +498,18 @@ a img {
   margin-top: 1rem;
 }
 
+.modal-pie button i{
+  font-size: 20px; 
+}
+.modal-pie button {
+  display: flex;
+  align-items: center;
+  gap: .5rem;  
+  color: var(--naranja);
+  padding: 20px;
+  font-size: 16px;
+  font-weight: 600;
+}
 .pie-derecha {
   border-top: none;
   margin-top: 1rem;
@@ -762,6 +774,10 @@ textarea {
 
 .fondo-crud{
   background-image: url('./img/banner-portada.png');
+  min-height: 100vhd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .encabezado-admin {
   display: flex;
@@ -876,7 +892,7 @@ textarea {
 @media (max-width: 639px) {
   .modal-contenido {
     width: calc(100% - 2rem);
-    margin: 1rem;
+    margin: 0rem;
     max-height: calc(100vh - 2rem);
     padding: 1rem;
   }
