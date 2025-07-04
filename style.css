@@ -755,15 +755,8 @@ textarea {
   margin-left: 0.5rem;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
 
-  100% {
-    transform: rotate(360deg);
-  }
-}
+
 
 /* Panel de Administración */
 .main-admin {
@@ -888,6 +881,10 @@ textarea {
   background-color: #3b82f6;
 }
 
+
+
+
+
 /* Media Queries */
 @media (max-width: 639px) {
   .modal-contenido {
@@ -982,6 +979,12 @@ textarea {
 
   .encabezado-admin .boton {
     width: 100%;
+  }
+  .fondo-crud{
+    display: block;
+  }
+  .contenedor .main-admin{
+    margin-top: 2rem;
   }
 }
 
