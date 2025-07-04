@@ -1,12 +1,12 @@
 // Configuración de la API base
 // Define la URL base de tu API de productos.
-/* const CONFIG = {
+const CONFIG = {
   API_BASE_URL: "https://api-crud-berlini.vercel.app/api/v1/productos",
   // Las credenciales de ADMIN_USERNAME y ADMIN_PASSWORD NO deben estar en el código del cliente en producción.
   // Deben ser validadas por una API en el servidor (como tu función serverless /api/login).
   ADMIN_USERNAME: "admin",
   ADMIN_PASSWORD: "admin123",
-} */
+}
 
 // Elementos del DOM (Document Object Model)
 // Se obtienen referencias a los elementos HTML con los que el script interactuará.
@@ -164,7 +164,7 @@ async function subirImagen(file) {
     formData.append("image", file) // Añade el archivo al FormData con el nombre 'image' (debe coincidir con tu Multer config en rutas.mjs)
 
     // Realiza una solicitud POST a tu endpoint de subida de imágenes
-    const response = await fetch(`${process.env.API_BASE_URL}/upload-image`, {
+    const response = await fetch(`${CONFIG.API_BASE_URL}/upload-image`, {
       method: "POST",
       body: formData, // Envía el FormData
       // No se establece Content-Type aquí; el navegador lo hace automáticamente para FormData
@@ -192,7 +192,7 @@ async function eliminarImagen(imageUrl) {
 
   try {
     // Realiza una solicitud DELETE a tu endpoint de eliminación de imágenes
-    const response = await fetch(`${process.env.API_BASE_URL}/delete-image`, {
+    const response = await fetch(`${CONFIG.API_BASE_URL}/delete-image`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json", // Indica que el cuerpo es JSON
@@ -218,7 +218,7 @@ async function eliminarImagen(imageUrl) {
 async function fetchProductosAPI() {
   try {
     // Añade un timestamp para evitar problemas de caché en el navegador
-    const url = `${process.env.API_BASE_URL}?_=${new Date().getTime()}`
+    const url = `${CONFIG.API_BASE_URL}?_=${new Date().getTime()}`
     console.log("Fetching products from API:", url)
     const respuesta = await fetch(url)
     if (!respuesta.ok) {
@@ -245,7 +245,7 @@ async function fetchProductosAPI() {
 // Agrega un nuevo producto a través de la API.
 async function agregarProductoAPI(productoData) {
   try {
-    const respuesta = await fetch(`${process.env.API_BASE_URL}`, {
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -270,7 +270,7 @@ async function agregarProductoAPI(productoData) {
 // Modifica un producto existente a través de la API.
 async function modificarProductosAPI(id, productData) {
   try {
-    const respuesta = await fetch(`${process.env.API_BASE_URL}/${id}`, {
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -295,7 +295,7 @@ async function modificarProductosAPI(id, productData) {
 async function eliminarProductoAPI(id) {
   console.log(`Intentando eliminar producto con ID: ${id}`)
   try {
-    const respuesta = await fetch(`${process.env.API_BASE_URL}/${id}`, {
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL}/${id}`, {
       method: "DELETE",
     })
     console.log(`Respuesta de la API para eliminar: Status ${respuesta.status}, OK: ${respuesta.ok}`)
@@ -465,7 +465,7 @@ function abrirModalCrear() {
 async function abrirModalEditar(id) {
   try {
     console.log(`abrirModalEditar: Intentando obtener producto con ID: ${id}`)
-    const respuesta = await fetch(`${process.env.API_BASE_URL}/${id}`) // Obtiene el producto de la API
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL}/${id}`) // Obtiene el producto de la API
     if (!respuesta.ok) {
       throw new Error(`Error HTTP! status: ${respuesta.status}`)
     }
@@ -516,7 +516,7 @@ async function abrirModalEditar(id) {
 async function abrirModalEliminar(id) {
   try {
     console.log(`abrirModalEliminar: Intentando obtener producto con ID: ${id}`)
-    const respuesta = await fetch(`${process.env.API_BASE_URL}/${id}`)
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL}/${id}`)
     if (!respuesta.ok) {
       throw new Error(`Error HTTP! status: ${respuesta.status}`)
     }
@@ -932,7 +932,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } 
        */
       e.preventDefault()
-      if (e.target.usuario.value === process.env.ADMIN_USERNAME && e.target.contrasena.value === process.env.ADMIN_PASSWORD) {
+      if (e.target.usuario.value === CONFIG.ADMIN_USERNAME && e.target.contrasena.value === CONFIG.ADMIN_PASSWORD) {
         localStorage.setItem("is_admin_logged_in", "true")
         window.location.href = "crud.html"
       } else {
