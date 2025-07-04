@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración - Viandas App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="encabezado">
+      <div class="contenedor encabezado-contenedor">
+        <img src="./img/berlini-logo-negro.png" width="100" alt="logo-berlini">
+        <button id="boton-logout-admin" class="boton boton-fantasma">
+          <svg
+            class="icono icono-mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" x2="3" y1="12" y2="12" />
+          </svg>
+          Cerrar Sesión
+        </button>
+      </div>
+  </header>
+    <section class="fondo-crud">  
+
+      <main class="contenedor main-admin">
+      <div class="encabezado-admin">
+        <h2 class="titulo-admin">Gestión de Productos</h2>
+        <button id="boton-agregar-producto" class="boton boton-primario">
+          <svg
+            class="icono icono-mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8 12h8" />
+            <path d="M12 8v8" />
+          </svg>
+          Agregar Nuevo Producto
+        </button>
+      </div>
+
+      <div class="contenedor-tabla-admin">
+        <table class="tabla-admin">
+          <thead>
+            <tr>
+              <th class="ancho-80">ID</th>
+              <th class="ancho-100">Imagen</th>
+              <th>Nombre</th>
+              <th>Detalle</th>
+              <th class="ancho-100 texto-derecha">Precio</th>
+              <th class="ancho-100 texto-derecha">Stock</th>
+              <th class="ancho-120 texto-centro">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-productos-admin">
+            <!-- Los productos se cargarán aquí con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    </section>
+    
+    <!-- Modal para crear/editar producto -->
+    <div id="productoModal" class="modal">
+      <div class="modal-contenido modal-contenido-grande">
+        <div class="modal-encabezado">
+          <h2 id="modalTitulo" class="modal-titulo">Crear Producto</h2>
+          <button class="boton-cerrar close">&times;</button>
+        </div>
+        <div class="modal-cuerpo">
+          <p class="modal-descripcion">Complete los detalles del producto y guarde los cambios.</p>
+          <form id="formulario-crud-producto" class="formulario-modal">
+            <div class="grupo-formulario form-group form-id">
+              <label for="id-producto">ID</label>
+              <input type="number" id="id-producto" class="form-control" readonly />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="nombre-producto">Nombre</label>
+              <input type="text" id="nombre-producto" class="form-control" required />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="detalle-producto">Detalle</label>
+              <input type="text" id="detalle-producto" class="form-control" required />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="precio-producto">Precio</label>
+              <input type="number" id="precio-producto" class="form-control" step="0.01" required />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="stock-producto">Stock</label>
+              <input type="number" id="stock-producto" class="form-control" required />
+            </div>
+            <!-- Nueva sección para imagen -->
+            <div class="grupo-formulario form-group">
+              <label for="imagen-producto">Imagen del Producto</label>
+              <div class="flex items-center gap-2">
+                <input type="file" id="imagen-producto" class="form-control" accept="image/*" />
+                <button type="button" id="remover-imagen" class="boton boton-contorno boton-pequeno">Remover Imagen</button>
+              </div>
+              <div id="preview-imagen" class="preview-imagen" style="margin-top: 0.5rem; display: none;">
+                <img id="img-preview" src="/placeholder.svg" alt="Preview" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 0.375rem; border: 1px solid var(--borde);" />
+              </div>
+            </div>
+            <div class="modal-pie pie-derecha">
+              <button id="btnGuardar" type="submit" class="boton boton-primario">
+                <span id="texto-guardar">Guardar</span>
+                <span id="spinner-guardar" class="spinner" style="display: none;"></span>
+              </button>
+              <button type="button" class="boton boton-contorno cerrar-modal">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div id="confirmarEliminarModal" class="modal" style="display: none;">
+      <div class="modal-contenido modal-contenido-pequeno">
+        <div class="modal-encabezado">
+          <h3 class="modal-titulo">Confirmar Eliminación</h3>
+          <button class="boton-cerrar close">&times;</button>
+        </div>
+        <div class="modal-cuerpo">
+          <p id="mensajeEliminar" class="modal-descripcion">¿Estás seguro de que quieres eliminar este producto?</p>
+        </div>
+        <div class="modal-pie">
+          <button id="btnEliminar" class="boton boton-destructivo">Eliminar</button>
+          <button class="boton boton-contorno cerrar-modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="contenedor-notificaciones" class="contenedor-notificaciones"></div>
+
+    <script type="module" src="js/script.js"></script>
+  </body>
+</html>
