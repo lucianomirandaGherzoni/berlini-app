@@ -71,6 +71,16 @@ body {
   align-items: center;
   gap: 1rem;
 }
+
+.encabezado-nav button i {
+  font-size: 25px;
+}
+
+.encabezado-nav button {
+  background-color: var(--texto-principal);
+  color: var(--borde);
+}
+
 a img {
   display: flex;
   justify-content: center;
@@ -98,9 +108,9 @@ a img {
   color: var(--texto-primario);
   font-weight: 600;
 }
+
 .boton-primario:hover {
   border: solid 2px var(--naranja);
-  color: var(--naranja);
   transition: all .5s;
 }
 
@@ -115,6 +125,12 @@ a img {
   border: solid 2px var(--naranja);
   color: var(--fondo);
   transition: all 1s;
+}
+
+.boton-compra {
+  width: 100%;
+  background-color: var(--primario);
+  color: green;
 }
 
 .boton-contorno {
@@ -187,8 +203,8 @@ a img {
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
-  background-color: var(--naranja);
-  color: var(--texto-principal);
+  background-color: var(--primario);
+  color: var(--naranja);
   border-radius: 9999px;
   height: 1.25rem;
   width: 1.25rem;
@@ -209,9 +225,14 @@ a img {
   text-align: center;
   width: 100%;
   background-color: #000000;
+  background-image: url("./img/banner-portada.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .heroe-contenedor {
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -233,10 +254,8 @@ a img {
   width: 300px;
   mask-image: linear-gradient(black 99%, transparent);
 }
+
 .heroe-imagen {
-  background-image: url("./img/banner-portada.png");
-  background-position: center;
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -250,6 +269,7 @@ a img {
   color: var(--fondo);
   margin: 0;
 }
+
 .heroe-titulo span {
   color: var(--naranja);
 }
@@ -498,18 +518,24 @@ a img {
   margin-top: 1rem;
 }
 
-.modal-pie button i{
-  font-size: 20px; 
+.modal-pie .boton-compra i {
+  font-size: 25px;
 }
-.modal-pie button {
+
+.modal-pie .boton-compra {
   display: flex;
   align-items: center;
-  gap: .5rem;  
-  color: var(--naranja);
+  gap: .5rem;
+  background-color: var(--naranja);
+  color: var(--primario);
   padding: 20px;
+  font-weight: bold;
   font-size: 16px;
   font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
 }
+
 .pie-derecha {
   border-top: none;
   margin-top: 1rem;
@@ -636,7 +662,8 @@ a img {
   cursor: pointer;
   width: 1rem;
   height: 1rem;
-  accent-color: var(--naranja); /* Added this line */
+  accent-color: var(--naranja);
+  /* Added this line */
 }
 
 .info-retiro {
@@ -765,13 +792,14 @@ textarea {
   background-color: var(--fondo);
 }
 
-.fondo-crud{
+.fondo-crud {
   background-image: url('./img/banner-portada.png');
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .encabezado-admin {
   display: flex;
   flex-direction: column;
@@ -881,6 +909,35 @@ textarea {
   background-color: #3b82f6;
 }
 
+.heroe-imagen-redes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+}
+
+.heroe-imagen-redes .redes {
+  width: 100%;
+}
+
+.redes ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0px;
+}
+
+.redes ul li {
+  font-size: 40px;
+  color: var(--naranja);
+  cursor: pointer;
+  background-color:var(--texto-principal);
+  border-radius: 20px;
+  padding: 5px 20px;
+}
 
 
 
@@ -893,35 +950,43 @@ textarea {
     max-height: calc(100vh - 2rem);
     padding: 1rem;
   }
+
   .heroe-contenedor {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0rem;
   }
 
   .heroe-contenido {
     order: 2;
   }
+
   .heroe-titulo {
     font-size: 2rem;
     font-weight: 400;
   }
+
   .heroe-descripcion {
     font-size: 1rem;
   }
+
   .heroe-imagen img {
-    width: 200px;
+    width: 250px;
     mask-image: linear-gradient(black 97%, transparent);
   }
+
   .heroe-imagen {
     border-radius: 100%;
     order: 0;
   }
+
   .tarjeta-pie {
     padding: 0px;
   }
+
   .tarjeta-pie .boton-primario {
     border-radius: 0px;
   }
+
   .tarjeta-precio {
     margin: 0px;
   }
@@ -934,10 +999,12 @@ textarea {
   .item-carrito {
     display: flex;
     flex-direction: row;
-    justify-content: space-between; /* Changed from center */
+    justify-content: space-between;
+    /* Changed from center */
     align-items: center;
     gap: 0.5rem;
-    flex-wrap: nowrap; /* Added to keep items in a single row */
+    flex-wrap: nowrap;
+    /* Added to keep items in a single row */
   }
 
   .item-carrito-imagen {
@@ -947,22 +1014,29 @@ textarea {
 
   .item-carrito-detalles {
     /* Removed width: 100%; */
-    flex-grow: 1; /* Added */
-    min-width: 80px; /* Adjusted */
+    flex-grow: 1;
+    /* Added */
+    min-width: 80px;
+    /* Adjusted */
   }
 
   .item-carrito-controles {
     /* Removed width: 100%; */
     justify-content: flex-start;
-    flex-shrink: 0; /* Added */
+    flex-shrink: 0;
+    /* Added */
   }
 
   .item-carrito-subtotal {
     /* Removed width: 100%; */
-    text-align: right; /* Changed from left */
-    margin-left: auto; /* Changed from 0 */
-    flex-shrink: 0; /* Added */
-    min-width: 60px; /* Adjusted */
+    text-align: right;
+    /* Changed from left */
+    margin-left: auto;
+    /* Changed from 0 */
+    flex-shrink: 0;
+    /* Added */
+    min-width: 60px;
+    /* Adjusted */
   }
 
   .formulario-login .fila-formulario {
@@ -980,10 +1054,12 @@ textarea {
   .encabezado-admin .boton {
     width: 100%;
   }
-  .fondo-crud{
+
+  .fondo-crud {
     display: block;
   }
-  .contenedor .main-admin{
+
+  .contenedor .main-admin {
     margin-top: 2rem;
   }
 }
