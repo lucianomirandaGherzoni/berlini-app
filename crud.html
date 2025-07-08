@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel de Administración - Viandas App</title>
+    
+  <!-- Tabler icons CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -34,21 +38,8 @@
       <main class="contenedor main-admin">
       <div class="encabezado-admin">
         <h2 class="titulo-admin">Gestión de Productos</h2>
-        <button id="boton-agregar-producto" class="boton boton-primario">
-          <svg
-            class="icono icono-mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M8 12h8" />
-            <path d="M12 8v8" />
-          </svg>
+        <button id="boton-agregar-producto" class="boton boton-primario boton-agregar-producto">
+          <i class="ti ti-plus"></i>
           Agregar Nuevo Producto
         </button>
       </div>

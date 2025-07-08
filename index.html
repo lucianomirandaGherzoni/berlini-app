@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Viandas App</title>
+  <link rel="icon" href="./img/logo-berlini.png" type="image/x-icon" sizes="32x32">
+  <title>Berlini App</title>
 
   <!-- Tabler icons CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
@@ -17,9 +18,14 @@
   <div class="contenedor encabezado-contenedor">
     <a href="#" class="logo"><img src="./img/berlini-logo-negro.png" alt="logo-berlini" width="100"></a>
     <nav class="encabezado-nav">
-      <button id="cart-button" class="boton boton-contorno boton-relativo">
-        <i class="ti ti-shopping-cart-filled"></i>
-        <span id="cart-item-count" class="contador-carrito" style="display: none">0</span>
+      <button class="boton boton-primario-naranja"
+        onclick="document.getElementById('seccion-productos').scrollIntoView({ behavior: 'smooth' })">
+        Ver Menú
+        <button id="cart-button" class="boton-carrito">
+          <i class="ti ti-shopping-cart-filled"></i>
+          <span id="cart-item-count" class="contador-carrito" style="display: none">0</span>
+        </button>
+
       </button>
     </nav>
   </div>
@@ -35,21 +41,18 @@
           <p class="heroe-descripcion">
             Descubre nuestras deliciosas opciones preparadas con ingredientes de calidad para simplificar tu día a día.
           </p>
-          <!--           <button class="boton boton-primario-naranja"
-            onclick="document.getElementById('seccion-productos').scrollIntoView({ behavior: 'smooth' })">
-            Ver Menú
-          </button> -->
+
         </div>
         <div class="heroe-imagen-redes">
           <div class="heroe-imagen">
-            <img src="./img/tongas-removebg-preview.png" alt="gaston-cocinero">
+            <img src="./img/logo-berlini.png" alt="Logo Berlini">
           </div>
           <div class="redes">
             <ul>
               <li><i class="ti ti-brand-instagram"></i></li>
               <li><i class="ti ti-brand-whatsapp"></i></li>
             </ul>
-            
+
           </div>
         </div>
 
@@ -67,6 +70,44 @@
         </div>
         <div id="grilla-productos" class="grilla-productos">
           <!-- Los productos se cargarán aquí con JavaScript -->
+        </div>
+      </div>
+    </section>
+    <!-- seccion contacto -->
+    <section class="seccion-contacto">
+      <div class="contenedor-contacto">
+        <div class="encabezado-seccion">
+          <h2 class="titulo-principal">Viandas para tu Empresa</h2>
+          <p class="descripcion-seccion">
+            ¿Buscas una solución práctica para las comidas en tu empresa? Contáctanos y te ayudaremos a
+            diseñar un plan de viandas personalizado.
+          </p>
+        </div>
+        <div class="tarjeta-formulario">
+          <div class="tarjeta-cabecera">
+            <h3 class="tarjeta-titulo">Contáctanos</h3>
+            <p class="tarjeta-descripcion">Completa el formulario y nos pondremos en contacto contigo a la brevedad.</p>
+          </div>
+          <form class="tarjeta-contenido">
+            <div class="grupo-formulario">
+              <label for="persona-contacto">Persona de Contacto</label>
+              <input id="persona-contacto" name="personaContacto" type="text" placeholder="Juan Pérez" required>
+            </div>
+            <div class="grupo-formulario">
+              <label for="telefono">Teléfono</label>
+              <input id="telefono" name="telefono" type="tel" placeholder="+54 9 11 1234-5678">
+            </div>
+            <div class="grupo-formulario">
+            </div>
+            <div class="grupo-formulario">
+              <label for="mensaje">Mensaje / Necesidades Específicas</label>
+              <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tus necesidades de viandas..."
+                rows="4"></textarea>
+            </div>
+            <div class="tarjeta-pie-contacto">
+              <button type="submit" class="boton-enviar-contacto">Enviar Consulta</button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
@@ -158,7 +199,7 @@
               </div>
             </div>
             <div class="modal-pie">
-              <button type="submit" class="boton boton-compra"> <i class="ti ti-brand-whatsapp"></i> Finalizar Compra
+              <button id="btn-compra" type="submit" class="boton boton-compra"> <i class="ti ti-brand-whatsapp"></i> Finalizar Compra
               </button>
             </div>
           </form>

@@ -7,6 +7,11 @@ const CONFIG = {
   ADMIN_USERNAME: "admin",
   ADMIN_PASSWORD: "admin123",
 }
+// Configuración de WhatsApp
+const WHATSAPP_CONFIG = {
+    phoneNumber: "5491123456789", // Cambiar por el número real
+    baseUrl: "https://wa.me/"
+};
 
 // Elementos del DOM 
 const listaProductos = document.getElementById("grilla-productos") // Contenedor de la lista de productos en la página principal
@@ -994,3 +999,103 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 })
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.tarjeta-contenido'); // Selecciona el formulario dentro de la tarjeta
+
+    if (form) {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Previene el envío por defecto del formulario
+
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            console.log('Datos del formulario enviados:', data);
+
+            // Aquí podrías añadir la lógica para enviar los datos a un servidor,
+            // por ejemplo, usando fetch():
+            /*
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Respuesta del servidor:', result);
+                alert('¡Tu consulta ha sido enviada con éxito!');
+                form.reset(); // Opcional: resetear el formulario
+            })
+            .catch(error => {
+                console.error('Error al enviar el formulario:', error);
+                alert('Hubo un error al enviar tu consulta. Por favor, inténtalo de nuevo.');
+            });
+            */
+
+            // Opcional: Mostrar un mensaje de éxito simple en el cliente
+            alert('¡Tu consulta ha sido enviada con éxito! Revisa la consola para ver los datos.');
+            form.reset(); // Limpia el formulario después del envío
+        });
+    }
+
+});
+
+
+
+function generarMensajeWhatsApp() {
+    if (itemsCarrito.length === 0) {
+        return "👋 ¡Hola! Me gustaría hacer un pedido, pero mi carrito está vacío. ¿Podrías ayudarme a elegir algo? 😊";
+    }
+
+    let mensaje = "📝 ¡Hola! Me gustaría hacer el siguiente pedido:\n\n";
+    let total = 0;
+
+    itemsCarrito.forEach((item, index) => {
+        const subtotal = item.precio * item.cantidad;
+        mensaje += `${index + 1}. ✨ ${item.nombre} (x${item.cantidad}) - $${subtotal.toFixed(2)}\n`;
+        total += subtotal;
+    });
+
+    mensaje += `\n💰 Total: $${total.toFixed(2)}\n\n`;
+    mensaje += "✅ ¡Espero tu confirmación! Gracias. 🙏";
+
+    return encodeURIComponent(mensaje); // Codifica el mensaje para ser seguro en la URL
+}
+
+/**
+ * Abre WhatsApp con el mensaje del pedido pre-cargado.
+ */
+function enviarPedidoWhatsApp() {
+    const mensajeWhatsApp = generarMensajeWhatsApp();
+    const urlWhatsApp = `${WHATSAPP_CONFIG.baseUrl}${WHATSAPP_CONFIG.phoneNumber}?text=${mensajeWhatsApp}`;
+    window.open(urlWhatsApp, '_blank'); // Abre la URL en una nueva pestaña
+}
+
+// =========================================================================
+// Event Listeners
+// =========================================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Event listener para el botón "Finalizar Compra"
+    const finalizarCompraBtn = document.getElementById("btn-compra");
+
+    if (finalizarCompraBtn) {
+        finalizarCompraBtn.onclick = (event) => {
+            event.preventDefault(); // Evita el comportamiento predeterminado del botón (ej. envío de formulario)
+
+            enviarPedidoWhatsApp(); // Llama a la función para enviar el mensaje
+
+            // Opcional: Vaciar el carrito después de enviar el pedido.
+            // Si tu carrito se actualiza visualmente, deberías añadir aquí la llamada a tu función de renderizado del carrito.
+            vaciarCarrito();
+
+            // Opcional: Si el botón está en un modal, podrías cerrarlo aquí.
+            // Por ejemplo: const modalCarrito = document.getElementById("modal-carrito");
+            // if (modalCarrito) modalCarrito.style.display = "none";
+        };
+    }
+});
