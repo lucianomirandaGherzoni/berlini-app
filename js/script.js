@@ -5,7 +5,7 @@ const CONFIG = {
   // Las credenciales de ADMIN_USERNAME y ADMIN_PASSWORD NO deben estar en el código del cliente en producción.
   // Deben ser validadas por una API en el servidor (como tu función serverless /api/login).
   ADMIN_USERNAME: "yamaha",
-  ADMIN_PASSWORD: "yamahabalto420",
+  ADMIN_PASSWORD: "yamahavalto420",
 }
 // Configuración de WhatsApp
 const WHATSAPP_CONFIG = {
