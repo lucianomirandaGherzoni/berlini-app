@@ -18,7 +18,7 @@
   <div class="contenedor encabezado-contenedor">
     <a href="#" class="logo"><img src="./img/berlini-logo-negro.png" alt="logo-berlini" width="100"></a>
     <nav class="encabezado-nav">
-      <button class="boton boton-primario-naranja"
+      <button class="boton-menu"
         onclick="document.getElementById('seccion-productos').scrollIntoView({ behavior: 'smooth' })">
         Ver Menú
         <button id="cart-button" class="boton-carrito">
@@ -34,9 +34,9 @@
   <!-- Contenido Principal -->
   <main>
     <!-- Sección Héroe -->
-    <section class="seccion seccion-heroe">
-      <div class="contenedor heroe-contenedor">
-        <div class="heroe-contenido">
+    <section class="seccion seccion-heroe ">
+      <div class="contenedor heroe-contenedor animacion-01">
+        <div class="heroe-contenido ">
           <h1 class="heroe-titulo"> Viandas <span>Caseras y Nutritivas.</span></h1>
           <p class="heroe-descripcion">
             Descubre nuestras deliciosas opciones preparadas con ingredientes de calidad para simplificar tu día a día.
@@ -44,15 +44,16 @@
 
         </div>
         <div class="heroe-imagen-redes">
-          <div class="heroe-imagen">
+          <div class="heroe-imagen ">
             <img src="./img/logo-berlini.png" alt="Logo Berlini">
           </div>
           <div class="redes">
             <ul>
-              <li><i class="ti ti-brand-instagram"></i></li>
-              <li><i class="ti ti-brand-whatsapp"></i></li>
+              <li><a href="https://www.instagram.com/berlinipastas/" target="_blank"><i
+                    class="ti ti-brand-instagram"></i></a></li>
+              <li><a href="https://wa.me/543517439138/?text= ¡ Hola Berlini Viandas !" target="_blank"><i
+                    class="ti ti-brand-whatsapp"></i></a></li>
             </ul>
-
           </div>
         </div>
 
@@ -74,19 +75,19 @@
       </div>
     </section>
     <!-- seccion contacto -->
-    <section class="seccion-contacto">
-      <div class="contenedor-contacto">
-        <div class="encabezado-seccion">
-          <h2 class="titulo-principal">Viandas para tu Empresa</h2>
+    <section class="seccion-contacto ">
+      <div class="contenedor-contacto animacion-01">
+        <div class="encabezado-seccion  animacion-04">
+          <h2 class="titulo-principal ">¡Solicita tu Plan de Viandas!</h2>
           <p class="descripcion-seccion">
-            ¿Buscas una solución práctica para las comidas en tu empresa? Contáctanos y te ayudaremos a
-            diseñar un plan de viandas personalizado.
+            Elige tu pack ideal. Opciones semanales y mensuales para tu comodidad y bienestar.
           </p>
         </div>
-        <div class="tarjeta-formulario">
+        <div class="tarjeta-formulario animacion-04">
           <div class="tarjeta-cabecera">
             <h3 class="tarjeta-titulo">Contáctanos</h3>
-            <p class="tarjeta-descripcion">Completa el formulario y nos pondremos en contacto contigo a la brevedad.</p>
+            <p class="tarjeta-descripcion">Indícanos el tipo de plan (semanal/mensual) y la cantidad de viandas (10, 20,
+              30) que te interesan. ¡Queremos saber tus preferencias!</p>
           </div>
           <form class="tarjeta-contenido">
             <div class="grupo-formulario">
@@ -94,8 +95,8 @@
               <input id="persona-contacto" name="personaContacto" type="text" placeholder="Juan Pérez" required>
             </div>
             <div class="grupo-formulario">
-              <label for="telefono">Teléfono</label>
-              <input id="telefono" name="telefono" type="tel" placeholder="+54 9 11 1234-5678">
+              <label for="telefono-contacto">Teléfono</label>
+              <input id="telefono-contacto" name="telefono" type="tel" placeholder="+54 9 11 1234-5678">
             </div>
             <div class="grupo-formulario">
             </div>
@@ -112,20 +113,17 @@
       </div>
     </section>
 
-    <!-- Sección de Horarios -->
-    <section class="seccion seccion-horarios">
-      <div class="contenedor horarios-contenedor">
-        <h2 class="horarios-titulo">Horarios de Atención</h2>
-        <div class="horarios-contenido">
-          <p>
-            Lunes a Viernes: <span class="texto-semibold">12:00 AM - 4 PM</span>
-          </p>
-          <p>
-            Sábados: <span class="texto-semibold">12:00 AM - 2:00 PM</span>
-          </p>
-          <p>
-            Domingos: <span class="texto-semibold">Cerrado</span>
-          </p>
+    <!-- Sección de redes -->
+    <section class="seccion seccion-redes">
+      <div class="contenedor redes">
+        <div class="redes-imagen animacion-01"><img src="./img/logo-berlini.png" alt="logo-berlini"></div>
+        <h2 class="redes">Seguinos en redes </h2>
+        <div class="redes-contenido">
+          <ul class="animacion-02">
+            <li><a href="https://www.instagram.com/berlinipastas/" target="_blank"><i class="ti ti-brand-instagram"></i></a></li>
+            <li><a href="https://wa.me/543517439138/?text= ¡ Hola Berlini Viandas !" target="_blank"><i
+                  class="ti ti-brand-whatsapp"></i></a></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -154,29 +152,38 @@
       </div>
       <div class="modal-cuerpo">
         <div id="contenedor-items-carrito" class="contenedor-items-carrito">
-          <!-- Los items del carrito se cargarán aquí -->
         </div>
+
         <div id="resumen-carrito" class="resumen-carrito" style="display: none;">
           <div class="total-carrito">
             <span class="total-carrito-etiqueta">Total:</span>
             <span id="monto-total-carrito" class="total-carrito-monto">$0.00</span>
           </div>
           <form id="formulario-checkout" class="formulario-checkout">
+            <div class="grupo-formulario">
+              <h3 class="formulario-titulo">Extras</h3>
+              <label>Dip Mayonesa y ajo (casero) ($2000 c/u)</label>
+              <div class="contador-dip">
+                <button type="button" id="decrementar-dip" class="boton-cantidad">-</button>
+                <span id="cantidad-dip">0</span>
+                <button type="button" id="incrementar-dip" class="boton-cantidad">+</button>
+              </div>
+            </div>
             <h3 class="formulario-titulo">Opciones de Entrega</h3>
             <div class="grupo-opciones-entrega">
               <div class="opcion-entrega">
-                <input type="radio" id="entrega-domicilio" name="metodo_entrega" value="domicilio" checked>
+                <input type="radio" id="entrega-domicilio" name="metodo_entrega" value="domicilio" checked required>
                 <label for="entrega-domicilio">Envío a domicilio</label>
               </div>
               <div class="opcion-entrega">
-                <input type="radio" id="entrega-sucursal" name="metodo_entrega" value="sucursal">
+                <input type="radio" id="entrega-sucursal" name="metodo_entrega" value="sucursal" required>
                 <label for="entrega-sucursal">Retiro por sucursal</label>
               </div>
             </div>
             <div id="info-retiro-sucursal" class="info-retiro" style="display:none;">
-              <p><strong>Horarios para retirar:</strong></p>
-              <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
-              <p>Sábados: 10:00 AM - 2:00 PM</p>
+              <p><strong>Direccion para retirar</strong></p>
+              <p>(coordinar una vez realizado el pedido)</p>
+              <p>AV. Bustillo ...</p>
             </div>
 
             <div id="campos-datos-cliente">
@@ -199,13 +206,17 @@
               </div>
             </div>
             <div class="modal-pie">
-              <button id="btn-compra" type="submit" class="boton boton-compra"> <i class="ti ti-brand-whatsapp"></i> Finalizar Compra
+              <button id="btn-compra" type="submit" class="boton boton-compra">
+                <i class="ti ti-brand-whatsapp"></i>
+                Finalizar Compra
               </button>
             </div>
           </form>
         </div>
+
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Modal de Inicio de Sesión -->
@@ -233,6 +244,9 @@
   </div>
 
   <div id="contenedor-notificaciones" class="contenedor-notificaciones"></div>
+  <!-- scrol reveal  -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+
 
   <script type="module" src="js/script.js"></script>
 </body>

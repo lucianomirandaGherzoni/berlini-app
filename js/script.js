@@ -4,14 +4,17 @@ const CONFIG = {
   API_BASE_URL: "https://api-crud-berlini.vercel.app/api/v1/productos",
   // Las credenciales de ADMIN_USERNAME y ADMIN_PASSWORD NO deben estar en el código del cliente en producción.
   // Deben ser validadas por una API en el servidor (como tu función serverless /api/login).
-  ADMIN_USERNAME: "admin",
-  ADMIN_PASSWORD: "admin123",
+  ADMIN_USERNAME: "yamaha",
+  ADMIN_PASSWORD: "yamahabalto420",
 }
 // Configuración de WhatsApp
 const WHATSAPP_CONFIG = {
-    phoneNumber: "5491123456789", // Cambiar por el número real
-    baseUrl: "https://wa.me/"
+  phoneNumber: "543517439138", // Cambiar por el número real
+  baseUrl: "https://wa.me/"
 };
+// Global variables for DIP functionality
+let cantidadDip = 0;
+const PRECIO_DIP = 2000; // Price per DIP
 
 // Elementos del DOM 
 const listaProductos = document.getElementById("grilla-productos") // Contenedor de la lista de productos en la página principal
@@ -39,6 +42,17 @@ const textoGuardar = document.getElementById("texto-guardar") // Texto del botó
 const btnAgregarProducto = document.getElementById("boton-agregar-producto") // Botón para abrir el modal de creación de producto
 const btnGuardarProducto = productoModal ? productoModal.querySelector("#btnGuardar") : null // Botón para guardar cambios en el modal de producto
 const btnEliminarConfirm = confirmarEliminarModal ? confirmarEliminarModal.querySelector("#btnEliminar") : null // Botón de confirmación de eliminación
+
+const finalizarCompraBtn = document.getElementById("btn-compra");
+const formulario = document.getElementById("formulario-checkout");
+// Get DIP elements
+const botonIncrementarDip = document.getElementById("incrementar-dip");
+const botonDecrementarDip = document.getElementById("decrementar-dip");
+const cantidadDipSpan = document.getElementById("cantidad-dip");
+// Assuming montoTotalCarritoSpan is already defined in your script,
+// if not, add it here:
+const montoTotalCarritoSpan = document.getElementById("monto-total-carrito");
+const resumenCarritoDiv = document.getElementById("resumen-carrito"); // Ensure this is visible when items are in the cart
 
 // Variables globales para el estado de la aplicación
 let productoActual = null // Almacena el producto que se está editando/eliminando
@@ -75,6 +89,8 @@ function showToast(message, type = "exito") {
     })
   }, 3000)
 }
+
+/* carrito */
 
 // Carga los ítems del carrito desde el almacenamiento local (localStorage).
 function cargarCarrito() {
@@ -114,10 +130,10 @@ function abrirModal(idModal) {
 // Cierra un modal específico.
 function cerrarModal(idModal) {
   const modal = document.getElementById(idModal)
-  if (modal){
+  if (modal) {
     modal.style.display = "none" // Cambia el estilo para ocultarlo
     document.body.style.overflow = "auto";
-  } 
+  }
 
 }
 
@@ -125,7 +141,7 @@ function cerrarModal(idModal) {
 function cerrarYLimpiarModales() {
   if (productoModal) productoModal.style.display = "none"
   if (confirmarEliminarModal) confirmarEliminarModal.style.display = "none"
-   document.body.style.overflow = "auto";
+  document.body.style.overflow = "auto";
   // Limpiar campos del formulario
   if (inputId) inputId.value = ""
   if (inputDetalle) inputDetalle.value = ""
@@ -789,6 +805,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Lógica específica para la página principal (index.html)
+
   if (document.getElementById("grilla-productos")) {
     renderizarProductos() // Renderiza los productos en la página principal
 
@@ -847,6 +864,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     }
 
+
     // Lógica para las opciones de entrega en el formulario de checkout.
     const radioDomicilio = document.getElementById("entrega-domicilio")
     const radioSucursal = document.getElementById("entrega-sucursal")
@@ -882,35 +900,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Manejador de envío del formulario de checkout.
-    document.getElementById("formulario-checkout").onsubmit = (e) => {
-      e.preventDefault()
-      if (itemsCarrito.length === 0) {
-        showToast("Tu carrito está vacío.", "error")
-        return
-      }
 
-      const formulario = e.target
-      const metodoEntrega = formulario.metodo_entrega.value
-      const datosPedido = {
-        metodoEntrega,
-        nombre: formulario.nombre.value,
-        telefono: formulario.telefono.value,
-        notas: formulario.notas.value,
-        items: itemsCarrito,
-        total: itemsCarrito.reduce((sum, item) => sum + item.precio * item.quantity, 0),
-      }
 
-      if (metodoEntrega === "domicilio") {
-        datosPedido.direccion = formulario.direccion.value
-      }
-
-      showToast("Pedido finalizado con éxito (simulación).")
-      itemsCarrito = []
-      guardarCarrito()
-      cerrarModal("modal-carrito")
-      formulario.reset()
-    }
 
     // Manejador de envío del formulario de login (usa la función serverless).
     document.getElementById("formulario-login").onsubmit = async (e) => {
@@ -999,103 +990,225 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 })
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.tarjeta-contenido'); // Selecciona el formulario dentro de la tarjeta
 
-    if (form) {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault(); // Previene el envío por defecto del formulario
 
-            const formData = new FormData(form);
-            const data = {};
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
-            }
+// Manejador de envío del formulario de checkout.
+document.getElementById("formulario-checkout").onsubmit = (e) => {
+  e.preventDefault()
+  if (itemsCarrito.length === 0) {
+    showToast("Tu carrito está vacío.", "error")
+    return
+  }
+  const formulario = e.target
+  const metodoEntrega = formulario.metodo_entrega.value
+  const datosPedido = {
+    metodoEntrega,
+    nombre: formulario.nombre.value,
+    telefono: formulario.telefono.value,
+    notas: formulario.notas.value,
+    items: itemsCarrito,
+    total: itemsCarrito.reduce((sum, item) => sum + item.precio * item.quantity, 0),
+  }
 
-            console.log('Datos del formulario enviados:', data);
+  if (metodoEntrega === "domicilio") {
+    datosPedido.direccion = formulario.direccion.value
+  }
 
-            // Aquí podrías añadir la lógica para enviar los datos a un servidor,
-            // por ejemplo, usando fetch():
-            /*
-            fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Respuesta del servidor:', result);
-                alert('¡Tu consulta ha sido enviada con éxito!');
-                form.reset(); // Opcional: resetear el formulario
-            })
-            .catch(error => {
-                console.error('Error al enviar el formulario:', error);
-                alert('Hubo un error al enviar tu consulta. Por favor, inténtalo de nuevo.');
-            });
-            */
-
-            // Opcional: Mostrar un mensaje de éxito simple en el cliente
-            alert('¡Tu consulta ha sido enviada con éxito! Revisa la consola para ver los datos.');
-            form.reset(); // Limpia el formulario después del envío
-        });
-    }
-
-});
-
+  showToast("Pedido finalizado con éxito (simulación).")
+  itemsCarrito = []
+  guardarCarrito()
+  cerrarModal("modal-carrito")
+  formulario.reset()
+}
 
 
 function generarMensajeWhatsApp() {
-    if (itemsCarrito.length === 0) {
-        return "👋 ¡Hola! Me gustaría hacer un pedido, pero mi carrito está vacío. ¿Podrías ayudarme a elegir algo? 😊";
-    }
+  const nombre = document.getElementById("nombre").value;
+  const direccion = document.getElementById("direccion").value;
+  const telefono = document.getElementById("telefono").value;
+  const notas = document.getElementById("notas").value;
+  if (itemsCarrito.length === 0) {
+    return "¡Hola! Me gustaría hacer un pedido, pero mi carrito está vacío. ¿Podrías ayudarme a elegir algo?";
+  }
+  let mensaje = "*¡Hola Berlini! Me gustaría hacer el siguiente pedido:*\n";
+  let total = 0;
+  mensaje += `
+*Pedido a nombre de:* ${nombre}\n
+*Dirección:* ${direccion}\n
+*Teléfono:* ${telefono}\n
+*Notas:* ${notas || "Sin notas"}\n\n
+`;
 
-    let mensaje = "📝 ¡Hola! Me gustaría hacer el siguiente pedido:\n\n";
-    let total = 0;
+  mensaje += "*Productos:*\n";
+  itemsCarrito.forEach((item) => {
+    const subtotal = item.precio * item.quantity;
+    mensaje += `- ${item.nombre} ( cantidad: ${item.quantity}) - $${subtotal.toFixed(2)}\n`;
+    total += subtotal;
+  });
 
-    itemsCarrito.forEach((item, index) => {
-        const subtotal = item.precio * item.cantidad;
-        mensaje += `${index + 1}. ✨ ${item.nombre} (x${item.cantidad}) - $${subtotal.toFixed(2)}\n`;
-        total += subtotal;
-    });
+  mensaje += `\nTotal: $${total.toFixed(2)}\n`;
+  mensaje += "*¡Espero tu confirmación! Gracias.* ";
 
-    mensaje += `\n💰 Total: $${total.toFixed(2)}\n\n`;
-    mensaje += "✅ ¡Espero tu confirmación! Gracias. 🙏";
-
-    return encodeURIComponent(mensaje); // Codifica el mensaje para ser seguro en la URL
+  return encodeURIComponent(mensaje); // Codifica el mensaje para ser seguro en la URL
 }
 
 /**
  * Abre WhatsApp con el mensaje del pedido pre-cargado.
  */
 function enviarPedidoWhatsApp() {
-    const mensajeWhatsApp = generarMensajeWhatsApp();
-    const urlWhatsApp = `${WHATSAPP_CONFIG.baseUrl}${WHATSAPP_CONFIG.phoneNumber}?text=${mensajeWhatsApp}`;
-    window.open(urlWhatsApp, '_blank'); // Abre la URL en una nueva pestaña
+  const mensajeWhatsApp = generarMensajeWhatsApp();
+  const urlWhatsApp = `${WHATSAPP_CONFIG.baseUrl}${WHATSAPP_CONFIG.phoneNumber}?text=${mensajeWhatsApp}`;
+  window.open(urlWhatsApp, '_blank'); // Abre la URL en una nueva pestaña
 }
+
+// Function to update the total (NEW or update existing)
+// Make sure this function calculates total based on itemsCarrito AND cantidadDip
+function actualizarTotalCarrito() {
+  let totalItems = itemsCarrito.reduce((sum, item) => sum + item.precio * item.quantity, 0);
+  let totalDips = cantidadDip * PRECIO_DIP;
+  let totalGeneral = totalItems + totalDips;
+  if (montoTotalCarritoSpan) {
+    montoTotalCarritoSpan.textContent = `$${totalGeneral.toFixed(2)}`;
+  }
+
+  // Show/hide the summary section based on cart content or dips
+  if (totalItems > 0 || totalDips > 0) {
+    if (resumenCarritoDiv) {
+      resumenCarritoDiv.style.display = "block";
+    }
+  } else {
+    if (resumenCarritoDiv) {
+      resumenCarritoDiv.style.display = "none";
+    }
+  }
+}
+
 
 // =========================================================================
 // Event Listeners
 // =========================================================================
 
+
+/* logica enviar mensaje carrito */
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Event listener para el botón "Finalizar Compra"
-    const finalizarCompraBtn = document.getElementById("btn-compra");
 
-    if (finalizarCompraBtn) {
-        finalizarCompraBtn.onclick = (event) => {
-            event.preventDefault(); // Evita el comportamiento predeterminado del botón (ej. envío de formulario)
+  // Event listeners for DIP counter
+  if (botonIncrementarDip) {
+    botonIncrementarDip.addEventListener("click", () => {
+      cantidadDip++;
+      cantidadDipSpan.textContent = cantidadDip;
+      actualizarTotalCarrito(); // Call to update the total display
+    });
+  }
 
-            enviarPedidoWhatsApp(); // Llama a la función para enviar el mensaje
+  if (botonDecrementarDip) {
+    botonDecrementarDip.addEventListener("click", () => {
+      if (cantidadDip > 0) {
+        cantidadDip--;
+        cantidadDipSpan.textContent = cantidadDip;
+        actualizarTotalCarrito(); // Call to update the total display
+      }
+    });
+  }
 
-            // Opcional: Vaciar el carrito después de enviar el pedido.
-            // Si tu carrito se actualiza visualmente, deberías añadir aquí la llamada a tu función de renderizado del carrito.
-            vaciarCarrito();
+  // Initial update of total when the modal opens or page loads
+  // Make sure this is called when your cart modal is opened or initialized
+  // For now, let's assume it's safe to call here on DOMContentLoaded
+  actualizarTotalCarrito();
 
-            // Opcional: Si el botón está en un modal, podrías cerrarlo aquí.
-            // Por ejemplo: const modalCarrito = document.getElementById("modal-carrito");
-            // if (modalCarrito) modalCarrito.style.display = "none";
-        };
-    }
+
+
+  if (finalizarCompraBtn && formulario) {
+    finalizarCompraBtn.onclick = (event) => {
+      event.preventDefault(); // Prevenir el comportamiento por defecto
+
+      // Validación de campos del formulario
+      if (!formulario.checkValidity()) {
+        formulario.reportValidity(); // Muestra los mensajes de error
+        showToast("Por favor, completá todos los campos requeridos.", "error");
+        return;
+      }
+      // Validación de carrito
+      if (itemsCarrito.length > 0) {
+        enviarPedidoWhatsApp(); // Función personalizada
+        itemsCarrito = [];
+        cantidadDip = 0;        // <-- RESET DIP QUANTITY
+        cantidadDipSpan.textContent = 0; // <-- UPDATE DIP DISPLAY
+        guardarCarrito();
+        showToast("¡Pedido enviado con éxito!", "success");
+        cerrarModal("modal-carrito");
+      } else {
+        showToast("No puedes finalizar la compra con el carrito vacío.", "error");
+      }
+    };
+  } else {
+    showToast("No se pudo realizar el pedido, llene todos los campos", "error");
+  }
 });
+
+/* formulario contacto */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('.tarjeta-contenido'); // Selecciona el formulario dentro de la tarjeta
+
+  if (form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Previene el envío por defecto del formulario
+
+      const formData = new FormData(form);
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+
+      console.log('Datos del formulario enviados:', data);
+
+      // Aquí podrías añadir la lógica para enviar los datos a un servidor,
+      // por ejemplo, usando fetch():
+      /*
+      fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(result => {
+          console.log('Respuesta del servidor:', result);
+          alert('¡Tu consulta ha sido enviada con éxito!');
+          form.reset(); // Opcional: resetear el formulario
+      })
+      .catch(error => {
+          console.error('Error al enviar el formulario:', error);
+          alert('Hubo un error al enviar tu consulta. Por favor, inténtalo de nuevo.');
+      });
+      */
+
+      // Opcional: Mostrar un mensaje de éxito simple en el cliente
+      alert('¡Tu consulta ha sido enviada con éxito! Revisa la consola para ver los datos.');
+      form.reset(); // Limpia el formulario después del envío
+    });
+  }
+
+});
+
+
+/* animaciones Reveal */
+
+// ✅ Inicializa ScrollReveal con opciones globales
+const sr = ScrollReveal({
+  distance: '30px',
+  duration: 1000,
+  easing: 'ease-in-out',
+  origin: 'top',
+  reset: false, // 👈 Esto hace que se reinicie cada vez que haces scroll
+  once: true   // 👈 Solo se anima la primera
+});
+
+// ✅ Revela elementos específicos con diferentes orígenes
+sr.reveal('.animacion-01', { delay: 400, origin: 'top' });
+sr.reveal('.animacion-02', { delay: 400, origin: 'left' });
+sr.reveal('.animacion-03', { delay: 400, origin: 'right' }); // 👈 corregido "rigth" → "right"
+sr.reveal('.animacion-04', { delay: 400, origin: 'top', reset: false, once: true });
