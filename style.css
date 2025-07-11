@@ -135,11 +135,8 @@ a {
   background-color: transparent;
   padding: 10px 15px;
   transition: all 1s;
-}
-
-.encabezado-nav .boton-menu:hover {
-  border-color: var(--naranja);
-
+   border-color: var(--naranja);
+   border-radius: 5px;
 }
 
 .boton-primario-naranja:hover {
