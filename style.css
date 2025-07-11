@@ -50,14 +50,14 @@ body {
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-}
-
-.encabezado-contenedor {
-  display: flex;
+    display: flex;
   height: 4rem;
   align-items: center;
   justify-content: space-between;
+  padding: 0em 4em 0em 4em;
 }
+
+
 
 .logo {
   font-size: 1.125rem;
@@ -70,6 +70,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+
 }
 
 .encabezado-nav button i {
@@ -86,7 +87,8 @@ a img {
   justify-content: center;
   align-items: center;
 }
-a{
+
+a {
   text-decoration: none;
 }
 
@@ -123,20 +125,23 @@ a{
   font-weight: 300;
   padding: 21px 10px;
 }
-.encabezado-nav .boton-menu{
+
+.encabezado-nav .boton-menu {
   border-style: none;
   background-color: transparent;
   border: solid 2px transparent;
   font-weight: bold;
   color: #000000;
-  background-color:transparent;
+  background-color: transparent;
   padding: 10px 15px;
-    transition: all 1s;
+  transition: all 1s;
 }
-.encabezado-nav .boton-menu:hover{
-    border-color: var(--naranja);
+
+.encabezado-nav .boton-menu:hover {
+  border-color: var(--naranja);
 
 }
+
 .boton-primario-naranja:hover {
   background-color: #000000;
   border: solid 2px var(--naranja);
@@ -296,7 +301,7 @@ a{
   background-color: #000000;
   border-radius: 200px;
   box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 90%);
-  
+
 }
 
 .heroe-titulo {
@@ -351,6 +356,28 @@ a{
   gap: 1rem;
 }
 
+/* Whatsapp flotante */
+.whatsapp-flotante {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+
+}
+
+.whatsapp-flotante a {
+  color: var(--naranja);
+
+  font-size: 30px;
+  background-color: var(--texto-principal);
+  padding: 15px;
+  border-radius: 200%;
+}
+
+.whatsapp-flotante a:hover {
+  color: var(--fondo);
+  transition: all 1s;
+}
+
 /* Tarjeta de Producto */
 .tarjeta {
   border: 1px solid var(--borde);
@@ -366,8 +393,10 @@ a{
 .tarjeta:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
-.tarjeta-cabecera{
+
+.tarjeta-cabecera {
   width: 100%;
+  height: 200px;
 }
 
 .tarjeta-cabecera img {
@@ -415,7 +444,7 @@ a{
   padding: 3rem 0;
   /* py-12 */
   position: relative;
-  background: linear-gradient(to bottom, var(--fondo), var(--fondo),var(--naranja));
+  background: linear-gradient(to bottom, var(--fondo), var(--fondo), var(--naranja));
   /* blue-50 to purple-50 */
   overflow: hidden;
 }
@@ -606,16 +635,19 @@ a{
 .boton-enviar-contacto:active {
   transform: translateY(0);
 }
+
 /* Styles for DIP MAYONESA-AJO counter */
 .contador-dip {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between buttons and number */
+  gap: 10px;
+  /* Space between buttons and number */
   margin-top: 10px;
 }
 
 .contador-dip .boton-cantidad {
-  background-color: #f0f0f0; /* Light grey background */
+  background-color: #f0f0f0;
+  /* Light grey background */
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 30px;
@@ -639,7 +671,8 @@ a{
 .contador-dip #cantidad-dip {
   font-size: 1.1em;
   font-weight: bold;
-  min-width: 20px; /* Ensures space even for single digit */
+  min-width: 20px;
+  /* Ensures space even for single digit */
   text-align: center;
 }
 
@@ -651,7 +684,8 @@ a{
   background-size: cover;
   padding: 1rem;
 }
-.redes{
+
+.redes {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -665,18 +699,21 @@ a{
   box-shadow: 0 0 20px 25px rgba(0, 0, 0, 100%);
   padding: 2rem;
 }
-.seccion-redes .redes-imagen img{
+
+.seccion-redes .redes-imagen img {
   border-radius: 100%;
-    object-fit: contain;
-    width: 100%;
+  object-fit: contain;
+  width: 100%;
   -webkit-mask-image: radial-gradient(circle, black 65%, transparent 10%);
   mask-image: radial-gradient(circle, black 65%, transparent 10%);
 }
-.redes-imagen { 
+
+.redes-imagen {
   background-color: #000000;
   width: 250px;
   border-radius: 100%;
 }
+
 .redes h2 {
   font-size: 2rem;
   font-weight: bold;
@@ -1221,7 +1258,7 @@ textarea {
 }
 
 .notificacion.info {
-  background-color:#000000;
+  background-color: #000000;
 }
 
 .heroe-imagen-redes {
@@ -1246,7 +1283,7 @@ textarea {
 }
 
 
-.redes ul li a{
+.redes ul li a {
   font-size: 27px;
   color: var(--naranja);
   cursor: pointer;
