@@ -10,6 +10,14 @@
   <!-- Tabler icons CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 
+  <!-- Email js -->
+<script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+  emailjs.init('SuTKdD6bCdZIDgPHk')
+</script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -74,39 +82,35 @@
         </div>
       </div>
     </section>
-    <!-- seccion contacto -->
-    <section class="seccion-contacto ">
+    <!-- Sección contacto -->
+    <section class="seccion-contacto">
       <div class="contenedor-contacto animacion-01">
-        <div class="encabezado-seccion  animacion-04">
-          <h2 class="titulo-principal ">¡Solicita tu Plan de Viandas!</h2>
+        <div class="encabezado-seccion animacion-04">
+          <h2 class="titulo-principal">¡Solicita tu Plan de Viandas!</h2>
           <p class="descripcion-seccion">
             Opciones semanales y mensuales para tu comodidad y bienestar.
-            Indícanos el tipo de plan (semanal/mensual) y la cantidad de viandas (10, 20,
-            30) que te interesan.
           </p>
         </div>
         <div class="tarjeta-formulario animacion-04">
-          <div class="">
+          <div>
             <h3 class="tarjeta-titulo">Contáctanos</h3>
           </div>
-          <form class="tarjeta-contenido">
+          <form class="tarjeta-contenido" id="form">
             <div class="grupo-formulario">
-              <label for="persona-contacto">Persona de Contacto</label>
-              <input id="persona-contacto" name="personaContacto" type="text" placeholder="Juan Pérez" required>
+              <label for="name">Persona de Contacto</label>
+              <input id="name" name="name" type="text" placeholder="Tu Nombre" required />
             </div>
             <div class="grupo-formulario">
-              <label for="telefono-contacto">Teléfono</label>
-              <input id="telefono-contacto" name="telefono" type="tel" placeholder="+54 9 11 1234-5678">
+              <label for="phone">Teléfono</label>
+              <input id="phone" name="phone" type="tel" placeholder="+54 2944134555" required />
             </div>
             <div class="grupo-formulario">
-            </div>
-            <div class="grupo-formulario">
-              <label for="mensaje">Mensaje / Necesidades Específicas</label>
-              <textarea id="mensaje" name="mensaje" placeholder="¡Queremos saber tus preferencias!..."
-                rows="4"></textarea>
+              <label for="message">Mensaje / Necesidades Específicas</label>
+              <textarea id="message" name="message" placeholder="¡Queremos saber tus preferencias!..." rows="4"
+                required></textarea>
             </div>
             <div class="tarjeta-pie-contacto">
-              <button type="submit" class="boton-enviar-contacto">Enviar Consulta</button>
+              <button type="submit" class="boton-enviar-contacto" id="boton-contacto">Enviar Consulta</button>
             </div>
           </form>
         </div>

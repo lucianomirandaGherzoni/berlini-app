@@ -750,6 +750,7 @@ a {
 .pie-pagina-nav {
   display: flex;
   gap: 1rem;
+  padding: 0px 100px 0px 100px;
 }
 
 .pie-pagina-enlace {

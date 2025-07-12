@@ -512,6 +512,9 @@ async function abrirModalEditar(id) {
       if (modalTitulo) modalTitulo.textContent = "Editar Producto"
       if (inputId) inputId.value = cleanId
       if (inputId) inputId.readOnly = true // El ID no se puede editar
+
+        document.getElementById('editar-id').style.display = "none";
+        
       if (inputNombre) inputNombre.value = producto.nombre
       if (inputPrecio) inputPrecio.value = producto.precio
       if (inputDetalle) inputDetalle.value = producto.detalle
@@ -760,14 +763,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  // Cierra el modal al hacer clic fuera de su contenido.
-  document.querySelectorAll(".modal").forEach((modal) => {
-    modal.addEventListener("click", (event) => {
-      if (event.target === modal) {
-        cerrarModal(modal.id)
-      }
-    })
-  })
+
 
   // Manejador de eventos para el input de archivo de imagen.
   if (inputImagen) {
@@ -938,7 +934,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "crud.html"
       } else {
         showToast(
-          `Credenciales inválidas. para probar.`,
+          `Credenciales inválidas.`,
           "error",
         )
       }
@@ -1149,52 +1145,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* formulario contacto */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('.tarjeta-contenido'); // Selecciona el formulario dentro de la tarjeta
 
-  if (form) {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault(); // Previene el envío por defecto del formulario
+const btn = document.getElementById('boton-contacto');
 
-      const formData = new FormData(form);
-      const data = {};
-      for (let [key, value] of formData.entries()) {
-        data[key] = value;
-      }
+document.getElementById('form')
+ .addEventListener('submit', function(event) {
+   event.preventDefault();
 
-      console.log('Datos del formulario enviados:', data);
+   btn.value = 'Enviando...';
 
-      // Aquí podrías añadir la lógica para enviar los datos a un servidor,
-      // por ejemplo, usando fetch():
-      /*
-      fetch('/api/contact', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-      })
-      .then(response => response.json())
-      .then(result => {
-          console.log('Respuesta del servidor:', result);
-          alert('¡Tu consulta ha sido enviada con éxito!');
-          form.reset(); // Opcional: resetear el formulario
-      })
-      .catch(error => {
-          console.error('Error al enviar el formulario:', error);
-          alert('Hubo un error al enviar tu consulta. Por favor, inténtalo de nuevo.');
-      });
-      */
+   const serviceID = 'default_service';
+   const templateID = 'template_1o9rsr8';
 
-      // Opcional: Mostrar un mensaje de éxito simple en el cliente
-      alert('¡Tu consulta ha sido enviada con éxito! Revisa la consola para ver los datos.');
-      form.reset(); // Limpia el formulario después del envío
+   emailjs.sendForm(serviceID, templateID, this)
+    .then(() => {
+      btn.value = 'Enviar Mail';
+      showToast('Mensaje enviado')
+      document.getElementById('form').reset();
+    }, (err) => {
+      btn.value = 'Enviar Mail';
+      showToast('Error al enviar Mensaje', err)
     });
-  }
-
 });
-
-
 /* animaciones Reveal */
 
 // ✅ Inicializa ScrollReveal con opciones globales
