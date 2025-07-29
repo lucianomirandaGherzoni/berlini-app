@@ -20,11 +20,15 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 
-a{
+a {
   text-decoration: none;
 }
+
 body {
   font-family: sans-serif;
   line-height: 1.5;
@@ -42,6 +46,7 @@ body {
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
 /* Encabezado con flex y space-between */
 .encabezado {
   position: sticky;
@@ -55,7 +60,8 @@ body {
   display: flex;
   height: 4rem;
   align-items: center;
-  justify-content: space-between; /* Logo izquierda, nav derecha */
+  justify-content: space-between;
+  /* Logo izquierda, nav derecha */
   padding: 0 2rem;
 }
 
@@ -64,7 +70,8 @@ body {
   font-weight: bold;
   text-decoration: none;
   color: var(--texto-principal);
-  flex-shrink: 0; /* Evita que el logo se comprima */
+  flex-shrink: 0;
+  /* Evita que el logo se comprima */
 }
 
 .nav-container {
@@ -74,13 +81,16 @@ body {
 
 /* Encabezado con position sticky corregido */
 .encabezado {
-  position: -webkit-sticky; /* Para Safari */
+  position: -webkit-sticky;
+  /* Para Safari */
   position: sticky;
   top: 0;
-  z-index: 500; /* Z-index más alto para asegurar que esté encima */
+  z-index: 500;
+  /* Z-index más alto para asegurar que esté encima */
   width: 100%;
   border-bottom: 1px solid var(--borde);
-  background-color: rgba(255, 255, 255, 0.95); /* Más opaco para mejor visibilidad */
+  background-color: rgba(255, 255, 255, 0.95);
+  /* Más opaco para mejor visibilidad */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
@@ -88,7 +98,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* Sombra sutil */
 }
 
 .logo {
@@ -196,13 +207,13 @@ body {
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
-  
+
 }
 
 .menu-movil.activo {
   display: flex;
   transform: translateX(0);
-  
+
 }
 
 /* Header del menú móvil */
@@ -265,10 +276,21 @@ body {
   transform: translateY(20px);
 }
 
-.nav-link-movil:nth-child(1) { animation: fadeInUp 0.6s ease 0.3s forwards; }
-.nav-link-movil:nth-child(2) { animation: fadeInUp 0.6s ease 0.4s forwards; }
-.nav-link-movil:nth-child(3) { animation: fadeInUp 0.6s ease 0.5s forwards; }
-.nav-link-movil:nth-child(4) { animation: fadeInUp 0.6s ease 0.6s forwards; }
+.nav-link-movil:nth-child(1) {
+  animation: fadeInUp 0.6s ease 0.3s forwards;
+}
+
+.nav-link-movil:nth-child(2) {
+  animation: fadeInUp 0.6s ease 0.4s forwards;
+}
+
+.nav-link-movil:nth-child(3) {
+  animation: fadeInUp 0.6s ease 0.5s forwards;
+}
+
+.nav-link-movil:nth-child(4) {
+  animation: fadeInUp 0.6s ease 0.6s forwards;
+}
 
 .nav-link-movil:hover {
   background-color: var(--naranja);
@@ -374,8 +396,8 @@ body {
   background-color: transparent;
   padding: 10px 15px;
   transition: all 1s;
-   border-color: var(--naranja);
-   border-radius: 5px;
+  border-color: var(--naranja);
+  border-radius: 5px;
 }
 
 .boton-primario-naranja:hover {
@@ -590,9 +612,9 @@ body {
   line-height: 1.625;
 }
 
-  .grilla-viandas,
-  .grilla-combos,
-  .grilla-pastas {
+.grilla-viandas,
+.grilla-combos,
+.grilla-pastas {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -602,7 +624,8 @@ body {
 /* Carrito flotante */
 .carrito-flotante {
   position: fixed;
-  bottom: 80px; /* Arriba del WhatsApp */
+  bottom: 80px;
+  /* Arriba del WhatsApp */
   right: 10px;
   z-index: 999;
 }
@@ -658,9 +681,11 @@ body {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1);
   }
@@ -711,6 +736,7 @@ body {
   border: 2px solid var(--fondo);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
+
 /* Tarjeta de Producto */
 .tarjeta {
   border: 1px solid var(--borde);
@@ -1642,6 +1668,7 @@ textarea {
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -1653,6 +1680,7 @@ textarea {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -1664,6 +1692,7 @@ textarea {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1791,21 +1820,23 @@ textarea {
   .contenedor .main-admin {
     margin-top: 2rem;
   }
+
   .desktop-nav {
     display: none;
   }
-  
+
   .mobile-controls {
     display: flex;
   }
-  
+
   .encabezado {
     padding: 0 1.5rem;
   }
-  
+
 }
 
 @media (min-width: 640px) {
+
   .grilla-viandas,
   .grilla-combos,
   .grilla-pastas {
@@ -1894,10 +1925,11 @@ textarea {
     width: auto;
     /* md:w-auto */
   }
-    .mobile-controls {
+
+  .mobile-controls {
     display: none;
   }
-  
+
   .menu-movil {
     display: none !important;
   }
@@ -1905,6 +1937,7 @@ textarea {
 
 
 @media (min-width: 1280px) {
+
   .grilla-viandas,
   .grilla-combos,
   .grilla-pastas {
