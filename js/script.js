@@ -1109,7 +1109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       abrirModal("modal-carrito")
     }
         // Abre el modal del carrito.
-    document.getElementById("cart-button").onclick = () => {
+    document.getElementById("cart-button-flotante").onclick = () => {
       renderizarModalCarrito()
       abrirModal("modal-carrito")
     }
