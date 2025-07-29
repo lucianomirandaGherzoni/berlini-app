@@ -77,8 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menu-toggle");
   const menuMovil = document.getElementById("menu-movil");
   const cerrarMenu = document.getElementById("cerrar-menu");
-  const cartButtonMobile = document.getElementById("cart-button-mobile");
-  const cartButtonMovilModal = document.getElementById("cart-button-movil-modal");
   const navLinksMovil = document.querySelectorAll(".nav-link-movil");
   const navLinksDesktop = document.querySelectorAll(".nav-link");
 
@@ -151,20 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cerrarMenu.addEventListener("click", cerrarMenuMovil);
   }
 
-  // Botón carrito móvil (navbar)
-  if (cartButtonMobile) {
-    cartButtonMobile.addEventListener("click", abrirCarrito);
-  }
-
-  // Botón carrito móvil (modal)
-  if (cartButtonMovilModal) {
-    cartButtonMovilModal.addEventListener("click", () => {
-      cerrarMenuMovil();
-      setTimeout(() => {
-        abrirCarrito();
-      }, 300);
-    });
-  }
 
   // Navegación enlaces móviles
   navLinksMovil.forEach(link => {
@@ -237,20 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Sincronizar contadores al cargar
-  sincronizarContadores();
-  
-  // Observar cambios en el carrito para sincronizar contadores
-  const originalGuardarCarrito = window.guardarCarrito;
-  if (originalGuardarCarrito) {
-    window.guardarCarrito = function() {
-      originalGuardarCarrito();
-      sincronizarContadores();
-    };
-  }
 });
-
-
 
 
 
