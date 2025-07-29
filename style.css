@@ -181,19 +181,6 @@ body {
   transform-origin: 1px;
 }
 
-.menu-hamburguesa.activo .hamburguesa-linea:first-child {
-  transform: rotate(45deg);
-  background: var(--texto-principal);
-}
-
-.menu-hamburguesa.activo .hamburguesa-linea:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-hamburguesa.activo .hamburguesa-linea:nth-child(3) {
-  transform: rotate(-45deg);
-  background: var(--texto-principal);
-}
 
 /* Menú móvil - Pantalla completa con animación */
 .menu-movil {
@@ -205,15 +192,17 @@ body {
   height: 100vh;
   background: linear-gradient(135deg, var(--fondo) 0%, #f8f9fa 100%);
   flex-direction: column;
-  z-index: 1050;
+  z-index: 1200;
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
+  
 }
 
 .menu-movil.activo {
   display: flex;
   transform: translateX(0);
+  
 }
 
 /* Header del menú móvil */
@@ -660,7 +649,6 @@ body {
   justify-content: center;
   font-size: 0.75rem;
   font-weight: bold;
-  border: 2px solid var(--naranja);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   z-index: 10000;
 }

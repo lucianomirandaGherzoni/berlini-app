@@ -79,38 +79,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const cerrarMenu = document.getElementById("cerrar-menu");
   const cartButtonMobile = document.getElementById("cart-button-mobile");
   const cartButtonMovilModal = document.getElementById("cart-button-movil-modal");
-  const cartItemCountMobile = document.getElementById("cart-item-count-mobile");
-  const cartItemCountMovil = document.getElementById("cart-item-count-movil");
   const navLinksMovil = document.querySelectorAll(".nav-link-movil");
   const navLinksDesktop = document.querySelectorAll(".nav-link");
 
-  // Sincronizar contadores de carrito
-  function sincronizarContadores() {
-    const contador = itemsCarrito.reduce((total, item) => total + item.quantity, 0);
-    const spanContador = document.getElementById("cart-item-count");
-    
-    // Contador desktop
-    if (spanContador) {
-      spanContador.textContent = contador.toString();
-      spanContador.style.display = contador > 0 ? "flex" : "none";
-    }
-    
-    // Contador móvil (navbar)
-    if (cartItemCountMobile) {
-      cartItemCountMobile.textContent = contador.toString();
-      cartItemCountMobile.style.display = contador > 0 ? "flex" : "none";
-    }
-    
-    // Contador móvil (modal)
-    if (cartItemCountMovil) {
-      cartItemCountMovil.textContent = contador.toString();
-      cartItemCountMovil.style.display = contador > 0 ? "flex" : "none";
-    }
-  }
+
 
   // Función para abrir menú móvil
   function abrirMenuMovil() {
-    menuToggle.classList.add("activo");
+
     menuMovil.classList.add("activo");
     document.body.classList.add("menu-abierto");
     
@@ -125,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para cerrar menú móvil
   function cerrarMenuMovil() {
-    menuToggle.classList.remove("activo");
     menuMovil.classList.remove("activo");
     document.body.classList.remove("menu-abierto");
   }
@@ -325,9 +300,12 @@ function guardarCarrito() {
 function actualizarContadorCarrito() {
   const contador = itemsCarrito.reduce((total, item) => total + item.quantity, 0)
   const spanContador = document.getElementById("cart-item-count")
-  if (spanContador) {
+  const spanContadorFlotante = document.getElementById("cart-item-count-flotante")
+  if (spanContador || spanContadorFlotante) {
     spanContador.textContent = contador.toString()
+    spanContadorFlotante.textContent = contador.toString()
     spanContador.style.display = contador > 0 ? "flex" : "none" // Muestra/oculta el contador
+    spanContadorFlotante.style.display = contador > 0 ? "flex" : "none" // Muestra/oculta el contador
   }
 }
 
@@ -1131,10 +1109,12 @@ document.addEventListener("DOMContentLoaded", () => {
       abrirModal("modal-carrito")
     }
         // Abre el modal del carrito.
-    document.getElementById("cart-button-flotante").onclick = () => {
+    document.getElementById("cart-button").onclick = () => {
       renderizarModalCarrito()
       abrirModal("modal-carrito")
     }
+
+    
     // Abre el modal de inicio de sesión.
     document.getElementById("login-button").onclick = () => abrirModal("modal-login")
 
