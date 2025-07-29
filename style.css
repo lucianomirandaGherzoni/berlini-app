@@ -22,6 +22,9 @@
   box-sizing: border-box;
 }
 
+a{
+  text-decoration: none;
+}
 body {
   font-family: sans-serif;
   line-height: 1.5;
@@ -39,8 +42,7 @@ body {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
-/* Encabezado */
+/* Encabezado con flex y space-between */
 .encabezado {
   position: sticky;
   top: 0;
@@ -50,46 +52,294 @@ body {
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-    display: flex;
+  display: flex;
   height: 4rem;
   align-items: center;
-  justify-content: space-between;
-  padding: 0em 4em 0em 4em;
+  justify-content: space-between; /* Logo izquierda, nav derecha */
+  padding: 0 2rem;
 }
-
-
 
 .logo {
   font-size: 1.125rem;
   font-weight: bold;
   text-decoration: none;
   color: var(--texto-principal);
+  flex-shrink: 0; /* Evita que el logo se comprima */
 }
 
-.encabezado-nav {
+.nav-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Encabezado con position sticky corregido */
+.encabezado {
+  position: -webkit-sticky; /* Para Safari */
+  position: sticky;
+  top: 0;
+  z-index: 500; /* Z-index más alto para asegurar que esté encima */
+  width: 100%;
+  border-bottom: 1px solid var(--borde);
+  background-color: rgba(255, 255, 255, 0.95); /* Más opaco para mejor visibilidad */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.logo {
+  font-size: 1.125rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--texto-principal);
+  flex-shrink: 0;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilos para navegación desktop */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--texto-principal);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--naranja);
+  background-color: rgba(241, 167, 0, 0.1);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--naranja);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 80%;
+}
+
+/* Controles móviles */
+.mobile-controls {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Botón hamburguesa */
+.menu-hamburguesa {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1100;
+  position: relative;
+}
+
+.hamburguesa-linea {
+  width: 2rem;
+  height: 0.25rem;
+  background: var(--texto-principal);
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.menu-hamburguesa.activo .hamburguesa-linea:first-child {
+  transform: rotate(45deg);
+  background: var(--texto-principal);
+}
+
+.menu-hamburguesa.activo .hamburguesa-linea:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-hamburguesa.activo .hamburguesa-linea:nth-child(3) {
+  transform: rotate(-45deg);
+  background: var(--texto-principal);
+}
+
+/* Menú móvil - Pantalla completa con animación */
+.menu-movil {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--fondo) 0%, #f8f9fa 100%);
+  flex-direction: column;
+  z-index: 1050;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+
+.menu-movil.activo {
+  display: flex;
+  transform: translateX(0);
+}
+
+/* Header del menú móvil */
+.menu-movil-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--borde);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.logo-movil {
+  opacity: 0;
+  animation: fadeInLeft 0.6s ease 0.2s forwards;
+}
+
+.cerrar-menu {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--texto-principal);
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeInRight 0.6s ease 0.2s forwards;
+}
+
+.cerrar-menu:hover {
+  background-color: var(--mutado);
+  color: var(--naranja);
+}
+
+/* Contenido del menú móvil */
+.menu-movil-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.nav-link-movil {
+  text-decoration: none;
+  color: var(--texto-principal);
+  font-weight: 600;
+  font-size: 1.25rem;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 1rem;
-
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--borde);
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.encabezado-nav button i {
-  font-size: 25px;
+.nav-link-movil:nth-child(1) { animation: fadeInUp 0.6s ease 0.3s forwards; }
+.nav-link-movil:nth-child(2) { animation: fadeInUp 0.6s ease 0.4s forwards; }
+.nav-link-movil:nth-child(3) { animation: fadeInUp 0.6s ease 0.5s forwards; }
+.nav-link-movil:nth-child(4) { animation: fadeInUp 0.6s ease 0.6s forwards; }
+
+.nav-link-movil:hover {
+  background-color: var(--naranja);
+  color: var(--fondo);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(241, 167, 0, 0.3);
 }
 
-.encabezado-nav button {
-  background-color: var(--texto-principal);
-  color: var(--borde);
+.nav-link-movil i {
+  font-size: 1.5rem;
+  width: 2rem;
+  text-align: center;
 }
 
-a img {
+/* Footer del menú móvil */
+.menu-movil-footer {
+  padding: 2rem;
+  border-top: 1px solid var(--borde);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.boton-carrito-movil {
+  width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background-color: var(--texto-principal);
+  color: var(--fondo);
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.7s forwards;
 }
 
-a {
-  text-decoration: none;
+.boton-carrito-movil:hover {
+  background-color: var(--naranja);
+  transform: translateY(-2px);
+}
+
+.contador-carrito-movil {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: var(--naranja);
+  color: var(--texto-principal);
+  border-radius: 9999px;
+  height: 1.5rem;
+  width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
 }
 
 /* Botones */
@@ -216,8 +466,27 @@ a {
   margin-right: 0.5rem;
 }
 
-/* Contador Carrito */
 
+/* Contador carrito corregido - más visible */
+.contador-carrito {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: var(--naranja);
+  color: var(--texto-principal);
+  border-radius: 50%;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+}
+
+/* Asegurar que el botón carrito tenga position relative */
 .boton-carrito {
   position: relative;
   padding: 10px 15px;
@@ -226,21 +495,6 @@ a {
   cursor: pointer;
 }
 
-.contador-carrito {
-  position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  background-color: var(--naranja);
-  color: var(--texto-principal);
-  border-radius: 9999px;
-  height: 1.25rem;
-  width: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
 
 /* Secciones */
 .seccion {
@@ -347,34 +601,128 @@ a {
   line-height: 1.625;
 }
 
-.grilla-productos {
+  .grilla-viandas,
+  .grilla-combos,
+  .grilla-pastas {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-/* Whatsapp flotante */
+
+/* Carrito flotante */
+.carrito-flotante {
+  position: fixed;
+  bottom: 80px; /* Arriba del WhatsApp */
+  right: 10px;
+  z-index: 999;
+}
+
+.boton-carrito-flotante {
+  background-color: var(--naranja);
+  color: var(--texto-principal);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(241, 167, 0, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  font-size: 24px;
+}
+
+.boton-carrito-flotante:hover {
+  background-color: var(--texto-principal);
+  color: var(--naranja);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
+.boton-carrito-flotante:active {
+  transform: translateY(0);
+}
+
+.contador-carrito-flotante {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--texto-principal);
+  color: var(--fondo);
+  border-radius: 50%;
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid var(--naranja);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+}
+
+/* Animación de pulso cuando se agrega algo al carrito */
+@keyframes pulseCart {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.carrito-flotante.pulse {
+  animation: pulseCart 0.3s ease-in-out;
+}
+
+/* Ajustar WhatsApp flotante para que esté más abajo */
 .whatsapp-flotante {
   position: fixed;
   bottom: 20px;
   right: 10px;
-
+  z-index: 998;
 }
 
 .whatsapp-flotante a {
   color: var(--naranja);
-
   font-size: 30px;
   background-color: var(--texto-principal);
   padding: 15px;
-  border-radius: 200%;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .whatsapp-flotante a:hover {
   color: var(--fondo);
-  transition: all 1s;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
 }
 
+/* Contador móvil modal corregido */
+.contador-carrito-movil {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: var(--naranja);
+  color: var(--texto-principal);
+  border-radius: 50%;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid var(--fondo);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
 /* Tarjeta de Producto */
 .tarjeta {
   border: 1px solid var(--borde);
@@ -767,7 +1115,7 @@ a {
 .modal {
   display: none;
   position: fixed;
-  z-index: 100;
+  z-index: 100000;
   left: 0;
   top: 0;
   width: 100%;
@@ -1225,7 +1573,7 @@ textarea {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -1299,6 +1647,40 @@ textarea {
   transition: 1s;
 }
 
+
+/* Animaciones */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 
 
@@ -1421,10 +1803,24 @@ textarea {
   .contenedor .main-admin {
     margin-top: 2rem;
   }
+  .desktop-nav {
+    display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .encabezado {
+    padding: 0 1.5rem;
+  }
+  
 }
 
 @media (min-width: 640px) {
-  .grilla-productos {
+  .grilla-viandas,
+  .grilla-combos,
+  .grilla-pastas {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1510,11 +1906,20 @@ textarea {
     width: auto;
     /* md:w-auto */
   }
+    .mobile-controls {
+    display: none;
+  }
+  
+  .menu-movil {
+    display: none !important;
+  }
 }
 
 
 @media (min-width: 1280px) {
-  .grilla-productos {
+  .grilla-viandas,
+  .grilla-combos,
+  .grilla-pastas {
     grid-template-columns: repeat(4, 1fr);
   }
 
@@ -1538,4 +1943,9 @@ textarea {
     font-size: 1.125rem;
     /* lg:text-base/relaxed */
   }
+}
+
+/* Overlay para prevenir scroll del body */
+.menu-abierto {
+  overflow: hidden !important;
 }

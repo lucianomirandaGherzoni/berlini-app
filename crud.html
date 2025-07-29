@@ -50,6 +50,7 @@
             <tr>
               <th class="ancho-100">Imagen</th>
               <th>Nombre</th>
+              <th class="ancho-120">Categoría</th>
               <th class="ancho-100 texto-derecha">Precio</th>
               <th class="ancho-100 texto-derecha">Stock</th>
               <th class="ancho-120 texto-centro">Acciones</th>
@@ -83,6 +84,15 @@
               <input type="text" id="nombre-producto" class="form-control" required />
             </div>
             <div class="grupo-formulario form-group">
+              <label for="categoria-producto">Categoría</label>
+              <select id="categoria-producto" class="form-control" required>
+                <option value="">Seleccionar categoría</option>
+                <option value="viandas">Viandas</option>
+                <option value="pastas">Pastas</option>
+                <option value="combos">Combos</option>
+              </select>
+            </div>
+            <div class="grupo-formulario form-group">
               <label for="detalle-producto">Detalle</label>
               <input type="text" id="detalle-producto" class="form-control" required />
             </div>
@@ -102,7 +112,7 @@
                 <button type="button" id="remover-imagen" class="boton boton-contorno boton-pequeno">Remover Imagen</button>
               </div>
               <div id="preview-imagen" class="preview-imagen" style="margin-top: 0.5rem; display: none;">
-                <img id="img-preview" src="/placeholder.svg" alt="Preview" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 0.375rem; border: 1px solid var(--borde);" />
+                <img id="img-preview" src="" alt="Preview" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 0.375rem; border: 1px solid var(--borde);" />
               </div>
             </div>
             <div class="modal-pie pie-derecha">

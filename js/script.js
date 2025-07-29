@@ -17,19 +17,24 @@ let cantidadDip = 0;
 const PRECIO_DIP = 2000; // Price per DIP
 
 // Elementos del DOM 
-const listaProductos = document.getElementById("grilla-productos") // Contenedor de la lista de productos en la página principal
+const listaViandas = document.getElementById("grilla-viandas") // Contenedor de la lista de productos en la página principal
+const listaPastas = document.getElementById("grilla-pastas") // Contenedor de la lista de productos en la página principal
+const listaCombos = document.getElementById("grilla-combos") // Contenedor de la lista de productos en la página principal
 const productoModal = document.getElementById("productoModal") // Modal para crear/editar productos
 const confirmarEliminarModal = document.getElementById("confirmarEliminarModal") // Modal de confirmación de eliminación
 const modalTitulo = document.getElementById("modalTitulo") // Título del modal de producto
 const mensajeEliminar = document.getElementById("mensajeEliminar") // Mensaje en el modal de eliminación
 
 // Campos de entrada del formulario de producto
-const inputId = document.getElementById("id-producto") // Campo ID del producto
-const inputNombre = document.getElementById("nombre-producto") // Campo Nombre del producto
-const inputDetalle = document.getElementById("detalle-producto") // Campo Detalle del producto
-const inputPrecio = document.getElementById("precio-producto") // Campo Precio del producto
-const inputStock = document.getElementById("stock-producto") // Campo Stock del producto
-const inputImagen = document.getElementById("imagen-producto") // Campo de entrada de archivo para la imagen
+// Campos de entrada del formulario de producto
+const inputId = document.getElementById("id-producto"); // Campo ID del producto
+const inputNombre = document.getElementById("nombre-producto"); // Campo Nombre del producto
+const inputDetalle = document.getElementById("detalle-producto"); // Campo Detalle del producto
+const inputPrecio = document.getElementById("precio-producto"); // Campo Precio del producto
+const inputStock = document.getElementById("stock-producto"); // Campo Stock del producto
+const inputImagen = document.getElementById("imagen-producto"); // Campo de entrada de archivo para la imagen
+const inputCategoria = document.getElementById("categoria-producto");
+
 
 // Elementos para manejo de imágenes en el modal de producto
 const previewImagen = document.getElementById("preview-imagen") // Contenedor de la previsualización de la imagen
@@ -64,6 +69,215 @@ const cartModal = document.getElementById("modal-carrito") // Modal del carrito 
 const loginModal = document.getElementById("modal-login") // Modal de inicio de sesión
 let itemsCarrito = [] // Array para almacenar los ítems en el carrito
 const CLAVE_CARRITO_STORAGE = "viandas_carrito" // Clave para almacenar el carrito en localStorage
+
+
+
+// Funcionalidad del menú responsive corregido
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menu-toggle");
+  const menuMovil = document.getElementById("menu-movil");
+  const cerrarMenu = document.getElementById("cerrar-menu");
+  const cartButtonMobile = document.getElementById("cart-button-mobile");
+  const cartButtonMovilModal = document.getElementById("cart-button-movil-modal");
+  const cartItemCountMobile = document.getElementById("cart-item-count-mobile");
+  const cartItemCountMovil = document.getElementById("cart-item-count-movil");
+  const navLinksMovil = document.querySelectorAll(".nav-link-movil");
+  const navLinksDesktop = document.querySelectorAll(".nav-link");
+
+  // Sincronizar contadores de carrito
+  function sincronizarContadores() {
+    const contador = itemsCarrito.reduce((total, item) => total + item.quantity, 0);
+    const spanContador = document.getElementById("cart-item-count");
+    
+    // Contador desktop
+    if (spanContador) {
+      spanContador.textContent = contador.toString();
+      spanContador.style.display = contador > 0 ? "flex" : "none";
+    }
+    
+    // Contador móvil (navbar)
+    if (cartItemCountMobile) {
+      cartItemCountMobile.textContent = contador.toString();
+      cartItemCountMobile.style.display = contador > 0 ? "flex" : "none";
+    }
+    
+    // Contador móvil (modal)
+    if (cartItemCountMovil) {
+      cartItemCountMovil.textContent = contador.toString();
+      cartItemCountMovil.style.display = contador > 0 ? "flex" : "none";
+    }
+  }
+
+  // Función para abrir menú móvil
+  function abrirMenuMovil() {
+    menuToggle.classList.add("activo");
+    menuMovil.classList.add("activo");
+    document.body.classList.add("menu-abierto");
+    
+    // Reiniciar animaciones
+    const elementos = menuMovil.querySelectorAll('.logo-movil, .cerrar-menu, .nav-link-movil, .boton-carrito-movil');
+    elementos.forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // Trigger reflow
+      el.style.animation = null;
+    });
+  }
+
+  // Función para cerrar menú móvil
+  function cerrarMenuMovil() {
+    menuToggle.classList.remove("activo");
+    menuMovil.classList.remove("activo");
+    document.body.classList.remove("menu-abierto");
+  }
+
+  // Función para abrir carrito
+  function abrirCarrito() {
+    renderizarModalCarrito();
+    abrirModal("modal-carrito");
+  }
+
+  // Función para navegar a secciones específicas
+  function navegarASeccion(seccion) {
+    let targetElement;
+    
+    switch(seccion) {
+      case 'viandas':
+        targetElement = document.getElementById('grilla-viandas');
+        break;
+      case 'pastas':
+        targetElement = document.getElementById('grilla-pastas');
+        break;
+      case 'combos':
+        targetElement = document.getElementById('grilla-combos');
+        break;
+      default:
+        return;
+    }
+    
+    if (targetElement) {
+      const seccionPadre = targetElement.closest('.seccion');
+      if (seccionPadre) {
+        const offsetTop = seccionPadre.offsetTop - 80;
+        window.scrollTo({
+          top: offsetTop,
+          behavior: "smooth"
+        });
+      }
+    }
+  }
+
+  // Toggle del menú móvil
+  if (menuToggle && menuMovil) {
+    menuToggle.addEventListener("click", abrirMenuMovil);
+  }
+
+  // Cerrar menú con botón X
+  if (cerrarMenu) {
+    cerrarMenu.addEventListener("click", cerrarMenuMovil);
+  }
+
+  // Botón carrito móvil (navbar)
+  if (cartButtonMobile) {
+    cartButtonMobile.addEventListener("click", abrirCarrito);
+  }
+
+  // Botón carrito móvil (modal)
+  if (cartButtonMovilModal) {
+    cartButtonMovilModal.addEventListener("click", () => {
+      cerrarMenuMovil();
+      setTimeout(() => {
+        abrirCarrito();
+      }, 300);
+    });
+  }
+
+  // Navegación enlaces móviles
+  navLinksMovil.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      const seccion = link.getAttribute("data-section");
+      if (seccion) {
+        navegarASeccion(seccion);
+      } else {
+        const href = link.getAttribute("href");
+        if (href && href.startsWith("#")) {
+          const targetSection = document.querySelector(href);
+          if (targetSection) {
+            const offsetTop = targetSection.offsetTop - 80;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth"
+            });
+          }
+        }
+      }
+      
+      cerrarMenuMovil();
+    });
+  });
+
+  // Navegación enlaces desktop
+  navLinksDesktop.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      const seccion = link.getAttribute("data-section");
+      if (seccion) {
+        navegarASeccion(seccion);
+      } else {
+        const href = link.getAttribute("href");
+        if (href && href.startsWith("#")) {
+          const targetSection = document.querySelector(href);
+          if (targetSection) {
+            const offsetTop = targetSection.offsetTop - 80;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth"
+            });
+          }
+        }
+      }
+    });
+  });
+
+  // Cerrar menú al hacer scroll
+  window.addEventListener("scroll", () => {
+    if (menuMovil && menuMovil.classList.contains("activo")) {
+      cerrarMenuMovil();
+    }
+  });
+
+  // Cerrar menú al redimensionar ventana
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+      cerrarMenuMovil();
+    }
+  });
+
+  // Cerrar menú al hacer clic fuera (en el overlay)
+  menuMovil.addEventListener("click", (e) => {
+    if (e.target === menuMovil) {
+      cerrarMenuMovil();
+    }
+  });
+
+  // Sincronizar contadores al cargar
+  sincronizarContadores();
+  
+  // Observar cambios en el carrito para sincronizar contadores
+  const originalGuardarCarrito = window.guardarCarrito;
+  if (originalGuardarCarrito) {
+    window.guardarCarrito = function() {
+      originalGuardarCarrito();
+      sincronizarContadores();
+    };
+  }
+});
+
+
+
+
 
 // --- Funciones de Utilidad ---
 
@@ -373,7 +587,7 @@ function crearTarjetaProducto(producto) {
         <div class="tarjeta-contenido">
             <h3 class="tarjeta-titulo">${producto.nombre}</h3>
             <p class="tarjeta-descripcion">${producto.detalle}</p>
-            <p class="tarjeta-precio">$${producto.precio.toFixed(2)}</p>
+            <p class="tarjeta-precio">$${producto.precio}</p>
         </div>
         <div class="tarjeta-pie">
             <button class="boton boton-primario boton-ancho-completo boton-agregar-carrito" data-product-id="${producto.id}">Agregar al Carrito</button>
@@ -383,25 +597,104 @@ function crearTarjetaProducto(producto) {
 }
 
 // Renderiza la lista de productos en la página principal.
-async function renderizarProductos() {
-  if (!listaProductos) return
-  listaProductos.innerHTML = "<p>Cargando productos...</p>"
-  const productosAPI = await fetchProductosAPI() // Obtiene productos de la API
-  listaProductos.innerHTML = "" // Limpia el contenedor
+async function renderizarViandas() {
+  if (!listaViandas) return;
+  listaViandas.innerHTML = "<p>Cargando productos...</p>";
+
+  const productosAPI = await fetchProductosAPI(); // Obtiene productos de la API
+  listaViandas.innerHTML = ""; // Limpia el contenedor
+
   if (productosAPI && productosAPI.length > 0) {
-    productosAPI.forEach((producto) => {
-      const card = crearTarjetaProducto(producto)
-      if (card) {
-        listaProductos.appendChild(card) // Añade cada producto como una tarjeta
-      }
+    // Filtra los productos para obtener solo aquellos con categoría "combos"
+    const viandasFiltrados = productosAPI.filter(
+      (producto) => producto.categoria === "viandas"
+    );
 
-
-    })
+    if (viandasFiltrados.length > 0) {
+      viandasFiltrados.forEach((producto) => {
+        const card = crearTarjetaProducto(producto);
+        if (card) {
+          listaViandas.appendChild(card); // Añade cada producto como una tarjeta
+        }
+      });
+    } else {
+      listaViandas.innerHTML =
+        '<p style="text-align: center; color: var(--texto-mutado);">No hay combos disponibles.</p>';
+    }
   } else {
-    listaProductos.innerHTML =
-      '<p style="text-align: center; color: var(--texto-mutado);">No hay productos disponibles.</p>'
+    listaViandas.innerHTML =
+      '<p style="text-align: center; color: var(--texto-mutado);">No hay productos disponibles en la API.</p>';
   }
 }
+
+
+// Renderiza la lista de productos en la página principal.
+async function renderizarPastas() {
+  if (!listaPastas) return;
+  listaPastas.innerHTML = "<p>Cargando productos...</p>";
+
+  const productosAPI = await fetchProductosAPI(); // Obtiene productos de la API
+  listaPastas.innerHTML = ""; // Limpia el contenedor
+
+  if (productosAPI && productosAPI.length > 0) {
+    // Filtra los productos para obtener solo aquellos con categoría "combos"
+    const pastasFiltrados = productosAPI.filter(
+      (producto) => producto.categoria === "pastas"
+    );
+
+    if (pastasFiltrados.length > 0) {
+      pastasFiltrados.forEach((producto) => {
+        const card = crearTarjetaProducto(producto);
+        if (card) {
+          listaPastas.appendChild(card); // Añade cada producto como una tarjeta
+        }
+      });
+    } else {
+      listaPastas.innerHTML =
+        '<p style="text-align: center; color: var(--texto-mutado);">No hay combos disponibles.</p>';
+    }
+  } else {
+    listaPastas.innerHTML =
+      '<p style="text-align: center; color: var(--texto-mutado);">No hay productos disponibles en la API.</p>';
+  }
+}
+renderizarPastas()
+// Renderiza la lista de productos en la página principal.
+async function renderizarCombos() {
+  if (!listaCombos) return;
+  listaCombos.innerHTML = "<p>Cargando productos...</p>";
+
+  const productosAPI = await fetchProductosAPI(); // Obtiene productos de la API
+  listaCombos.innerHTML = ""; // Limpia el contenedor
+
+  if (productosAPI && productosAPI.length > 0) {
+    // Filtra los productos para obtener solo aquellos con categoría "combos"
+    const combosFiltrados = productosAPI.filter(
+      (producto) => producto.categoria === "combos"
+    );
+
+    if (combosFiltrados.length > 0) {
+      combosFiltrados.forEach((producto) => {
+        const card = crearTarjetaProducto(producto);
+        if (card) {
+          listaCombos.appendChild(card); // Añade cada producto como una tarjeta
+        }
+      });
+    } else {
+      listaCombos.innerHTML =
+        '<p style="text-align: center; color: var(--texto-mutado);">No hay combos disponibles.</p>';
+    }
+  } else {
+    listaCombos.innerHTML =
+      '<p style="text-align: center; color: var(--texto-mutado);">No hay productos disponibles en la API.</p>';
+  }
+}
+renderizarCombos()
+
+
+
+
+
 
 // Agrega un producto al carrito de compras.
 function agregarAlCarrito(producto) {
@@ -513,13 +806,13 @@ async function abrirModalEditar(id) {
       if (inputId) inputId.value = cleanId
       if (inputId) inputId.readOnly = true // El ID no se puede editar
 
-        document.getElementById('editar-id').style.display = "none";
-        
+      document.getElementById('editar-id').style.display = "none";
+
       if (inputNombre) inputNombre.value = producto.nombre
       if (inputPrecio) inputPrecio.value = producto.precio
       if (inputDetalle) inputDetalle.value = producto.detalle
       if (inputStock) inputStock.value = producto.stock
-
+      if (inputCategoria) inputCategoria.value = producto.categoria;
       if (inputImagen) inputImagen.value = "" // Limpia el input de archivo para una nueva selección
 
       // Manejar imagen actual: limpia la previsualización y muestra la imagen existente si hay
@@ -588,7 +881,14 @@ async function guardarProducto() {
   const precio = inputPrecio ? Number.parseFloat(inputPrecio.value) : 0
   const stock = inputStock ? Number.parseInt(inputStock.value) : 0
   const detalle = inputDetalle ? inputDetalle.value.trim() : ""
+  const categoria = inputCategoria ? inputCategoria.value : "";
   const archivoImagen = inputImagen ? inputImagen.files[0] : null // Obtiene el archivo de imagen seleccionado
+
+  // Validación de categoría (ya que es un ENUM)
+  if (!categoria) {
+    showToast("Por favor seleccione una categoría para el producto.", "error");
+    return;
+  }
 
   // Validación básica de campos obligatorios
   if (!nombre || isNaN(precio) || precio <= 0 || !detalle || isNaN(stock) || stock < 0) {
@@ -637,8 +937,9 @@ async function guardarProducto() {
     detalle,
     precio,
     stock,
-    imagen_url, // Incluye la URL de la imagen en los datos del producto
-  }
+    categoria,
+    imagen_url,
+  };
 
   try {
     if (productoActual && productoActual.id) {
@@ -728,9 +1029,10 @@ async function renderizarProductosAdmin() {
 
     const fila = document.createElement("tr")
     fila.innerHTML = `
-          <td><img src="${producto.imagen_url || "/placeholder.svg?height=50&width=50"}" alt="${producto.nombre}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.375rem;"></td>
+          <td><img src="${producto.imagen_url}" alt="${producto.nombre}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.375rem;"></td>
           <td style="font-weight:500;">${producto.nombre}</td>
-          <td class="texto-derecha">$${producto.precio.toFixed(2)}</td>
+          <td class="texto-derecha">${producto.categoria}</td>
+          <td class="texto-derecha">$${producto.precio}</td>
           <td class="texto-derecha">${producto.stock}</td>
           <td class="acciones">
               <button class="boton boton-contorno boton-icono boton-editar-producto" data-product-id="${displayId}">
@@ -802,12 +1104,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Lógica específica para la página principal (index.html)
 
-  if (document.getElementById("grilla-productos")) {
-    renderizarProductos() // Renderiza los productos en la página principal
+  if (document.getElementById("grilla-viandas")) {
+    renderizarViandas() // Renderiza los productos en la página principal
 
     // Delegación de eventos para los botones "Agregar al Carrito".
-    if (listaProductos) {
-      listaProductos.addEventListener("click", (event) => {
+    if (listaViandas) {
+      listaViandas.addEventListener("click", (event) => {
         const addButton = event.target.closest(".boton-agregar-carrito")
         if (addButton) {
           const productId = Number(addButton.dataset.productId)
@@ -825,6 +1127,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Abre el modal del carrito.
     document.getElementById("cart-button").onclick = () => {
+      renderizarModalCarrito()
+      abrirModal("modal-carrito")
+    }
+        // Abre el modal del carrito.
+    document.getElementById("cart-button-flotante").onclick = () => {
       renderizarModalCarrito()
       abrirModal("modal-carrito")
     }
@@ -1149,24 +1456,24 @@ document.addEventListener("DOMContentLoaded", () => {
 const btn = document.getElementById('boton-contacto');
 
 document.getElementById('form')
- .addEventListener('submit', function(event) {
-   event.preventDefault();
+  .addEventListener('submit', function (event) {
+    event.preventDefault();
 
-   btn.value = 'Enviando...';
+    btn.value = 'Enviando...';
 
-   const serviceID = 'default_service';
-   const templateID = 'template_1o9rsr8';
+    const serviceID = 'default_service';
+    const templateID = 'template_1o9rsr8';
 
-   emailjs.sendForm(serviceID, templateID, this)
-    .then(() => {
-      btn.value = 'Enviar Mail';
-      showToast('Mensaje enviado')
-      document.getElementById('form').reset();
-    }, (err) => {
-      btn.value = 'Enviar Mail';
-      showToast('Error al enviar Mensaje', err)
-    });
-});
+    emailjs.sendForm(serviceID, templateID, this)
+      .then(() => {
+        btn.value = 'Enviar Mail';
+        showToast('Mensaje enviado')
+        document.getElementById('form').reset();
+      }, (err) => {
+        btn.value = 'Enviar Mail';
+        showToast('Error al enviar Mensaje', err)
+      });
+  });
 /* animaciones Reveal */
 
 // ✅ Inicializa ScrollReveal con opciones globales
