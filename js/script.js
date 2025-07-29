@@ -410,7 +410,6 @@ async function fetchProductosAPI() {
   try {
     // Añade un timestamp para evitar problemas de caché en el navegador
     const url = `${CONFIG.API_BASE_URL}?_=${new Date().getTime()}`
-    console.log("Fetching products from API:", url)
     const respuesta = await fetch(url)
     if (!respuesta.ok) {
       // Manejo específico para el caso de "No hay productos" si la API devuelve 200 con un mensaje
