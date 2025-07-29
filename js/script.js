@@ -1052,12 +1052,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Lógica específica para la página principal (index.html)
 
-  if (document.getElementById("grilla-viandas")) {
+  if (document.getElementById("grilla-viandas")|| document.getElementById("grilla-pastas")|| document.getElementById("grilla-combos")) {
     renderizarViandas() // Renderiza los productos en la página principal
 
     // Delegación de eventos para los botones "Agregar al Carrito".
     if (listaViandas) {
       listaViandas.addEventListener("click", (event) => {
+        const addButton = event.target.closest(".boton-agregar-carrito")
+        if (addButton) {
+          const productId = Number(addButton.dataset.productId)
+          fetchProductosAPI().then((products) => {
+            const productToAdd = products.find((p) => p.id === productId)
+            if (productToAdd) {
+              agregarAlCarrito(productToAdd)
+            } else {
+              console.error("Producto no encontrado con ID:", productId)
+            }
+          })
+        }
+      })
+    }
+
+        // Delegación de eventos para los botones "Agregar al Carrito".
+    if (listaPastas) {
+      listaPastas.addEventListener("click", (event) => {
+        const addButton = event.target.closest(".boton-agregar-carrito")
+        if (addButton) {
+          const productId = Number(addButton.dataset.productId)
+          fetchProductosAPI().then((products) => {
+            const productToAdd = products.find((p) => p.id === productId)
+            if (productToAdd) {
+              agregarAlCarrito(productToAdd)
+            } else {
+              console.error("Producto no encontrado con ID:", productId)
+            }
+          })
+        }
+      })
+    }
+        // Delegación de eventos para los botones "Agregar al Carrito".
+    if (listaCombos) {
+      listaCombos.addEventListener("click", (event) => {
         const addButton = event.target.closest(".boton-agregar-carrito")
         if (addButton) {
           const productId = Number(addButton.dataset.productId)
