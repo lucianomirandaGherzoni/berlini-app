@@ -568,11 +568,11 @@ async function renderizarViandas() {
       });
     } else {
       listaViandas.innerHTML =
-        '<p style="text-align: center; color: var(--texto-mutado);">No hay combos disponibles.</p>';
+        '<p style="text-align: center; color: var(--texto-mutado);">No hay Viandas disponibles.</p>';
     }
   } else {
     listaViandas.innerHTML =
-      '<p style="text-align: center; color: var(--texto-mutado);">No hay productos disponibles en la API.</p>';
+      '<p style="text-align: center; color: var(--texto-mutado);">No hay productos disponibles en el servidor.</p>';
   }
 }
 

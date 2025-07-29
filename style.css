@@ -44,52 +44,18 @@ body {
   padding-right: 1rem;
 }
 
-/* Encabezado con flex y space-between */
-.encabezado {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  width: 100%;
-  border-bottom: 1px solid var(--borde);
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  height: 4rem;
-  align-items: center;
-  justify-content: space-between;
-  /* Logo izquierda, nav derecha */
-  padding: 0 2rem;
-}
-
-.logo {
-  font-size: 1.125rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--texto-principal);
-  flex-shrink: 0;
-  /* Evita que el logo se comprima */
-}
-
-.nav-container {
-  display: flex;
-  align-items: center;
-}
 
 /* Encabezado con position sticky corregido */
 .encabezado {
-  position: -webkit-sticky;
-  /* Para Safari */
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 500;
+  z-index: 1000;
   /* Z-index más alto para asegurar que esté encima */
   width: 100%;
   border-bottom: 1px solid var(--borde);
   background-color: rgba(255, 255, 255, 0.95);
   /* Más opaco para mejor visibilidad */
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   display: flex;
   height: 4rem;
   align-items: center;
@@ -181,7 +147,7 @@ body {
 
 .hamburguesa-linea {
   width: 2rem;
-  height: 0.25rem;
+  height: 0.20rem;
   background: var(--texto-principal);
   border-radius: 10px;
   transition: all 0.3s linear;
@@ -229,7 +195,7 @@ body {
 .cerrar-menu {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2.2rem;
   cursor: pointer;
   color: var(--texto-principal);
   padding: 0.5rem;
@@ -516,6 +482,7 @@ body {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  padding-top: 100px;
 }
 
 .heroe-contenedor {
@@ -622,7 +589,7 @@ body {
   bottom: 80px;
   /* Arriba del WhatsApp */
   right: 10px;
-  z-index: 999;
+  z-index: 1500;
 }
 
 .boton-carrito-flotante {
@@ -695,7 +662,7 @@ body {
   position: fixed;
   bottom: 20px;
   right: 10px;
-  z-index: 998;
+  z-index: 1500;
 }
 
 .whatsapp-flotante a {
