@@ -8,7 +8,7 @@
   <title>Berlini App</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  
+
   <!-- Tabler icons CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 
@@ -25,61 +25,61 @@
 <body>
 
   <header>
- <!-- Encabezado -->
-<div class="encabezado">
-  <a href="#" class="logo"><img src="./img/berlini-logo-negro.png" alt="logo-berlini" width="100"></a>
-  
-  <div class="nav-container">
-    <!-- Menú de navegación desktop -->
-    <nav class="encabezado-nav desktop-nav">
-      <a href="#" class="nav-link" data-section="viandas">Viandas</a>
-      <a href="#" class="nav-link" data-section="pastas">Pastas</a>
-      <a href="#" class="nav-link" data-section="combos">Combos</a>
-      <a href="#contacto" class="nav-link">Contacto</a>
-      <button id="cart-button" class="boton-carrito">
-        <i class="ti ti-shopping-cart-filled"></i>
-        <span id="cart-item-count" class="contador-carrito" style="display: none">0</span>
-      </button>
-    </nav>
+    <!-- Encabezado -->
+    <div class="encabezado">
+      <a href="#" class="logo"><img src="./img/berlini-logo-negro.png" alt="logo-berlini" width="100"></a>
 
-    <!-- Elementos móviles: carrito + hamburguesa -->
-    <div class="mobile-controls">
-      <button class="menu-hamburguesa" id="menu-toggle">
-        <span class="hamburguesa-linea"></span>
-        <span class="hamburguesa-linea"></span>
-        <span class="hamburguesa-linea"></span>
-      </button>
-    </div>
-  </div>
+      <div class="nav-container">
+        <!-- Menú de navegación desktop -->
+        <nav class="encabezado-nav desktop-nav">
+          <a href="#" class="nav-link" data-section="viandas">Viandas</a>
+          <a href="#" class="nav-link" data-section="pastas">Pastas</a>
+          <a href="#" class="nav-link" data-section="combos">Combos</a>
+          <a href="#contacto" class="nav-link">Contacto</a>
+          <button id="cart-button" class="boton-carrito">
+            <i class="ti ti-shopping-cart-filled"></i>
+            <span id="cart-item-count" class="contador-carrito" style="display: none">0</span>
+          </button>
+        </nav>
 
-  <!-- Menú móvil -->
-  <nav class="menu-movil" id="menu-movil">
-    <div class="menu-movil-header">
-      <img src="./img/berlini-logo-negro.png" alt="logo-berlini" width="80" class="logo-movil">
-      <button class="cerrar-menu" id="cerrar-menu">
-        <i class="ti ti-x"></i>
-      </button>
+        <!-- Elementos móviles: carrito + hamburguesa -->
+        <div class="mobile-controls">
+          <button class="menu-hamburguesa" id="menu-toggle">
+            <span class="hamburguesa-linea"></span>
+            <span class="hamburguesa-linea"></span>
+            <span class="hamburguesa-linea"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Menú móvil -->
+      <nav class="menu-movil" id="menu-movil">
+        <div class="menu-movil-header">
+          <img src="./img/berlini-logo-negro.png" alt="logo-berlini" width="80" class="logo-movil">
+          <button class="cerrar-menu" id="cerrar-menu">
+            <i class="ti ti-x"></i>
+          </button>
+        </div>
+        <div class="menu-movil-content">
+          <a href="#" class="nav-link-movil" data-section="viandas">
+            <i class="ti ti-chef-hat"></i>
+            <span>Viandas</span>
+          </a>
+          <a href="#" class="nav-link-movil" data-section="pastas">
+            <i class="ti ti-bowl"></i>
+            <span>Pastas</span>
+          </a>
+          <a href="#" class="nav-link-movil" data-section="combos">
+            <i class="ti ti-package"></i>
+            <span>Combos</span>
+          </a>
+          <a href="#contacto" class="nav-link-movil">
+            <i class="ti ti-phone"></i>
+            <span>Contacto</span>
+          </a>
+        </div>
+      </nav>
     </div>
-    <div class="menu-movil-content">
-      <a href="#" class="nav-link-movil" data-section="viandas">
-        <i class="ti ti-chef-hat"></i>
-        <span>Viandas</span>
-      </a>
-      <a href="#" class="nav-link-movil" data-section="pastas">
-        <i class="ti ti-bowl"></i>
-        <span>Pastas</span>
-      </a>
-      <a href="#" class="nav-link-movil" data-section="combos">
-        <i class="ti ti-package"></i>
-        <span>Combos</span>
-      </a>
-      <a href="#contacto" class="nav-link-movil">
-        <i class="ti ti-phone"></i>
-        <span>Contacto</span>
-      </a>
-    </div>
-  </nav>
-</div>
   </header>
 
   <!-- Contenido Principal -->
@@ -240,13 +240,16 @@
           </div>
           <form id="formulario-checkout" class="formulario-checkout">
             <div class="grupo-formulario">
+
               <h3 class="formulario-titulo">Extras</h3>
-              <label>Dip Mayonesa y ajo (casero) ($2000 c/u)</label>
-              <div class="contador-dip">
+              <div id="salsas-extras-container">
+              </div>
+
+<!--               <div class="contador-dip">
                 <button type="button" id="decrementar-dip" class="boton-cantidad">-</button>
                 <span id="cantidad-dip">0</span>
                 <button type="button" id="incrementar-dip" class="boton-cantidad">+</button>
-              </div>
+              </div> -->
             </div>
             <h3 class="formulario-titulo">Opciones de Entrega</h3>
             <div class="grupo-opciones-entrega">
@@ -322,12 +325,12 @@
     </div>
   </div>
   <!-- Carrito flotante (agregar después del whatsapp-flotante) -->
-<div class="carrito-flotante">
-  <button id="cart-button-flotante" class="boton-carrito-flotante">
-    <i class="ti ti-shopping-cart-filled"></i>
-    <span id="cart-item-count-flotante" class="contador-carrito-flotante" style="display: none">0</span>
-  </button>
-</div>
+  <div class="carrito-flotante">
+    <button id="cart-button-flotante" class="boton-carrito-flotante">
+      <i class="ti ti-shopping-cart-filled"></i>
+      <span id="cart-item-count-flotante" class="contador-carrito-flotante" style="display: none">0</span>
+    </button>
+  </div>
 
   <div class="whatsapp-flotante">
     <a href="https://wa.me/543517439138/?text= ¡ Hola Berlini Viandas !" target="_blank"><i

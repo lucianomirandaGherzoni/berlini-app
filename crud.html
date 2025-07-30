@@ -33,9 +33,8 @@
         </button>
       </div>
   </header>
-    <section class="fondo-crud">  
-
-      <main class="contenedor main-admin">
+    <section class="fondo-crud">   
+      <section class="contenedor main-admin">
       <div class="encabezado-admin">
         <h2 class="titulo-admin">Gestión de Productos</h2>
         <button id="boton-agregar-producto" class="boton boton-primario boton-agregar-producto">
@@ -61,8 +60,33 @@
           </tbody>
         </table>
       </div>
-    </main>
+    </section>
 
+      <section class="contenedor main-admin">
+      <div class="encabezado-admin">
+        <h2 class="titulo-admin">Gestión Salsas / DIPS</h2>
+        <button id="boton-agregar-salsa" class="boton boton-primario boton-agregar-producto">
+          <i class="ti ti-plus"></i>
+          Agregar Nueva Salsa
+        </button>
+      </div>
+
+      <div class="contenedor-tabla-admin">
+        <table class="tabla-admin">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th class="ancho-100 texto-derecha">Precio</th>
+              <th class="ancho-100 texto-derecha">Stock</th>
+              <th class="ancho-120 texto-centro">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-salsas-admin">
+            <!-- Los productos se cargarán aquí con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
     </section>
     
     <!-- Modal para crear/editar producto -->
@@ -127,6 +151,44 @@
       </div>
     </div>
 
+    <!-- Modal para crear/editar salsa -->
+    <div id="salsaModal" class="modal">
+      <div class="modal-contenido modal-contenido-grande">
+        <div class="modal-encabezado">
+          <h2 id="modalTituloSalsa" class="modal-titulo">Crear salsa</h2>
+          <button class="boton-cerrar close">&times;</button>
+        </div>
+        <div class="modal-cuerpo">
+          <p class="modal-descripcion">Complete los detalles de los DIPS y guarde los cambios.</p>
+          <form id="formulario-crud-salsa" class="formulario-modal">
+            <div class="grupo-formulario form-group form-id" id="editar-id">
+              <label for="id-salsa">ID</label>
+              <input type="number" id="id-salsa" class="form-control" readonly />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="nombre-salsa">Nombre</label>
+              <input type="text" id="nombre-salsa" class="form-control" required />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="precio-salsa">Precio</label>
+              <input type="number" id="precio-salsa" class="form-control" step="0.01" required />
+            </div>
+            <div class="grupo-formulario form-group">
+              <label for="stock-salsa">Stock</label>
+              <input type="number" id="stock-salsa" class="form-control" required />
+            </div>
+            <div class="modal-pie pie-derecha">
+              <button id="btnGuardar-salsa" type="submit" class="boton boton-primario">
+                <span id="texto-guardar-salsa">Guardar</span>
+                <span id="spinner-guardar-salsa" class="spinner" style="display: none;"></span>
+              </button>
+              <button type="button" class="boton boton-contorno cerrar-modal">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal de Confirmación de Eliminación -->
     <div id="confirmarEliminarModal" class="modal" style="display: none;">
       <div class="modal-contenido modal-contenido-pequeno">
@@ -135,7 +197,7 @@
           <button class="boton-cerrar close">&times;</button>
         </div>
         <div class="modal-cuerpo">
-          <p id="mensajeEliminar" class="modal-descripcion">¿Estás seguro de que quieres eliminar este producto?</p>
+          <p id="mensajeEliminar" class="modal-descripcion">¿Estás seguro de que quieres eliminar este item?</p>
         </div>
         <div class="modal-pie">
           <button id="btnEliminar" class="boton boton-destructivo">Eliminar</button>

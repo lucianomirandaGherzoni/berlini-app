@@ -347,6 +347,15 @@ body {
   font-weight: 300;
   padding: 21px 10px;
 }
+#editar-id{
+  display: none;
+}
+.encabezado-nav{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 .encabezado-nav .boton-menu {
   border-style: none;
@@ -1205,6 +1214,14 @@ body {
 }
 
 /* Estilos del Carrito Mejorados */
+
+.salsa-item{
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  gap: 1rem;
+  padding: 10px 20px;
+}
 .contenedor-items-carrito {
   display: flex;
   flex-direction: column;
@@ -1458,12 +1475,15 @@ textarea {
 
 .fondo-crud {
   background-image: url('./img/banner-portada.png');
-  min-height: 100vh;
+  min-height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 2rem;
   background-size: cover;
   background-repeat: no-repeat;
+  padding: 100px 0px;
 }
 
 .encabezado-admin {

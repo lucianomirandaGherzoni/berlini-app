@@ -1,7 +1,9 @@
 // Configuración de la API base
 // Define la URL base de tu API de productos.
+// Define la URL base de tu API de dips.
 const CONFIG = {
   API_BASE_URL: "https://api-crud-berlini.vercel.app/api/v1/productos",
+  API_BASE_URL_DIP: "https://api-crud-berlini.vercel.app/api/v1/salsas",
   // Las credenciales de ADMIN_USERNAME y ADMIN_PASSWORD NO deben estar en el código del cliente en producción.
   // Deben ser validadas por una API en el servidor (como tu función serverless /api/login).
   ADMIN_USERNAME: "yamaha",
@@ -16,16 +18,24 @@ const WHATSAPP_CONFIG = {
 let cantidadDip = 0;
 const PRECIO_DIP = 2000; // Price per DIP
 
+// Referencia al contenedor donde se mostrarán las salsas
+const salsasExtrasContainer = document.getElementById('salsas-extras-container');
+
+// Objeto para almacenar la cantidad de cada salsa seleccionada (si manejas carrito/pedido)
+const cantidadesSalsas = {}; // Por ejemplo: { 'idSalsa1': 2, 'idSalsa2': 1 }
+
 // Elementos del DOM 
 const listaViandas = document.getElementById("grilla-viandas") // Contenedor de la lista de productos en la página principal
 const listaPastas = document.getElementById("grilla-pastas") // Contenedor de la lista de productos en la página principal
 const listaCombos = document.getElementById("grilla-combos") // Contenedor de la lista de productos en la página principal
 const productoModal = document.getElementById("productoModal") // Modal para crear/editar productos
+const salsaModal = document.getElementById("salsaModal") // Modal para crear/editar productos
 const confirmarEliminarModal = document.getElementById("confirmarEliminarModal") // Modal de confirmación de eliminación
 const modalTitulo = document.getElementById("modalTitulo") // Título del modal de producto
+const modalTituloSalsa = document.getElementById("modalTituloSalsa") // Título del modal de la salsa
 const mensajeEliminar = document.getElementById("mensajeEliminar") // Mensaje en el modal de eliminación
 
-// Campos de entrada del formulario de producto
+
 // Campos de entrada del formulario de producto
 const inputId = document.getElementById("id-producto"); // Campo ID del producto
 const inputNombre = document.getElementById("nombre-producto"); // Campo Nombre del producto
@@ -34,6 +44,14 @@ const inputPrecio = document.getElementById("precio-producto"); // Campo Precio 
 const inputStock = document.getElementById("stock-producto"); // Campo Stock del producto
 const inputImagen = document.getElementById("imagen-producto"); // Campo de entrada de archivo para la imagen
 const inputCategoria = document.getElementById("categoria-producto");
+
+// Campos de entrada del formulario de salsas
+const inputIdSalsa = document.getElementById("id-salsa"); // Campo ID del salsa
+const inputNombreSalsa = document.getElementById("nombre-salsa"); // Campo Nombre del salsa
+const inputPrecioSalsa = document.getElementById("precio-salsa"); // Campo Precio del salsa
+const inputStockSalsa = document.getElementById("stock-salsa"); // Campo Stock del salsa
+
+
 
 
 // Elementos para manejo de imágenes en el modal de producto
@@ -47,6 +65,11 @@ const textoGuardar = document.getElementById("texto-guardar") // Texto del botó
 const btnAgregarProducto = document.getElementById("boton-agregar-producto") // Botón para abrir el modal de creación de producto
 const btnGuardarProducto = productoModal ? productoModal.querySelector("#btnGuardar") : null // Botón para guardar cambios en el modal de producto
 const btnEliminarConfirm = confirmarEliminarModal ? confirmarEliminarModal.querySelector("#btnEliminar") : null // Botón de confirmación de eliminación
+
+const btnAgregarSalsa = document.getElementById("boton-agregar-salsa") // Botón para abrir el modal de creación de producto
+const btnGuardarSalsa = salsaModal ? salsaModal.querySelector("#btnGuardar-salsa") : null // Botón para guardar cambios en el modal de producto
+const spinnerGuardarSalsa = document.getElementById("spinner-guardar-salsa") // Spinner de carga para el botón guardar
+const textoGuardarSalsa = document.getElementById("texto-guardar-salsa") // Texto del botón guardar
 
 const finalizarCompraBtn = document.getElementById("btn-compra");
 const formulario = document.getElementById("formulario-checkout");
@@ -63,6 +86,8 @@ const resumenCarritoDiv = document.getElementById("resumen-carrito"); // Ensure 
 let productoActual = null // Almacena el producto que se está editando/eliminando
 let imagenActualUrl = null // Almacena la URL de la imagen actual del producto (si existe)
 let nuevaImagenFile = null // Almacena el objeto File de la nueva imagen seleccionada
+let salsaActual = null
+
 
 // Modales de carrito y login (para la página principal)
 const cartModal = document.getElementById("modal-carrito") // Modal del carrito de compras
@@ -87,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     menuMovil.classList.add("activo");
     document.body.classList.add("menu-abierto");
-    
+
     // Reiniciar animaciones
     const elementos = menuMovil.querySelectorAll('.logo-movil, .cerrar-menu, .nav-link-movil, .boton-carrito-movil');
     elementos.forEach(el => {
@@ -112,8 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Función para navegar a secciones específicas
   function navegarASeccion(seccion) {
     let targetElement;
-    
-    switch(seccion) {
+
+    switch (seccion) {
       case 'viandas':
         targetElement = document.getElementById('grilla-viandas');
         break;
@@ -126,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
       default:
         return;
     }
-    
+
     if (targetElement) {
       const seccionPadre = targetElement.closest('.seccion');
       if (seccionPadre) {
@@ -154,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   navLinksMovil.forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      
+
       const seccion = link.getAttribute("data-section");
       if (seccion) {
         navegarASeccion(seccion);
@@ -171,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
       }
-      
+
       cerrarMenuMovil();
     });
   });
@@ -180,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
   navLinksDesktop.forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      
+
       const seccion = link.getAttribute("data-section");
       if (seccion) {
         navegarASeccion(seccion);
@@ -303,15 +328,26 @@ function cerrarModal(idModal) {
 // Cierra todos los modales y limpia los campos del formulario de producto.
 function cerrarYLimpiarModales() {
   if (productoModal) productoModal.style.display = "none"
+  if (salsaModal) salsaModal.style.display = "none"
+
   if (confirmarEliminarModal) confirmarEliminarModal.style.display = "none"
+
   document.body.style.overflow = "auto";
-  // Limpiar campos del formulario
+
+  // Limpiar campos del formulario-productos
   if (inputId) inputId.value = ""
   if (inputDetalle) inputDetalle.value = ""
   if (inputStock) inputStock.value = ""
   if (inputNombre) inputNombre.value = ""
   if (inputPrecio) inputPrecio.value = ""
   if (inputImagen) inputImagen.value = "" // Limpia el input de tipo file
+
+  // Limpiar campos del formulario-salsas
+  if (inputIdSalsa) inputIdSalsa.value = ""
+  if (inputStockSalsa) inputStockSalsa.value = ""
+  if (inputNombreSalsa) inputNombreSalsa.value = ""
+  if (inputPrecioSalsa) inputPrecioSalsa.value = ""
+
 
   // Limpiar la previsualización de la imagen
   limpiarPreviewImagen()
@@ -323,6 +359,8 @@ function cerrarYLimpiarModales() {
 
   // Asegura que el campo ID no esté en modo solo lectura al cerrar
   if (inputId) inputId.readOnly = false
+  // Asegura que el campo ID no esté en modo solo lectura al cerrar
+  if (inputIdSalsa) inputIdSalsa.readOnly = false
 }
 
 // --- Funciones para manejo de imágenes (interactúan con tu API backend) ---
@@ -518,6 +556,122 @@ async function eliminarProductoAPI(id) {
   }
 }
 
+
+// --- Funciones de la API (CRUD de salsas/dips) ---
+
+// Obtiene todos los productos de la API.
+async function fetchSalsasAPI() {
+  try {
+    // Añade un timestamp para evitar problemas de caché en el navegador
+    const url = `${CONFIG.API_BASE_URL_DIP}?_=${new Date().getTime()}`
+    const respuesta = await fetch(url)
+    if (!respuesta.ok) {
+      // Manejo específico para el caso de "No hay productos" si la API devuelve 200 con un mensaje
+      if (respuesta.status === 200) {
+        const data = await respuesta.json()
+        if (data.mensaje && data.mensaje.includes("No hay Salsas")) {
+          console.log("API response: No hay Salsas")
+          return []
+        }
+      }
+      throw new Error(`Error HTTP: ${respuesta.status}`)
+    }
+    const data = await respuesta.json()
+    console.log("salsas fetched successfully:", data)
+    return data
+  } catch (error) {
+    console.error("Error al obtener los dips de la API:", error)
+    showToast("No se pudieron cargar los dips. Intente de nuevo más tarde.", "error")
+    return []
+  }
+}
+
+// Agrega un nuevo producto a través de la API.
+async function agregarSalsaAPI(salsaData) {
+  try {
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL_DIP}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(salsaData),
+    })
+    if (!respuesta.ok) {
+      const errorBody = await respuesta.json()
+      throw new Error(
+        `Error HTTP: ${respuesta.status}, mensaje: ${errorBody.mensaje || errorBody.message || "Error desconocido"}`,
+      )
+    }
+    const newProductResponse = await respuesta.json()
+    return newProductResponse.salsa
+  } catch (error) {
+    console.error("Error al agregar salsa a la API:", error)
+    showToast(`Error al agregar salsa: ${error.message}`, "error")
+    return null
+  }
+}
+
+// Modifica una salsa existente a través de la API.
+async function modificarSalsaAPI(id, salsaData) {
+  try {
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL_DIP}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(salsaData),
+    })
+    if (!respuesta.ok) {
+      const errorBody = await respuesta.json()
+      throw new Error(
+        `Error HTTP: ${respuesta.status}, mensaje: ${errorBody.mensaje || errorBody.message || "Error desconocido"}`,
+      )
+    }
+    return true
+  } catch (error) {
+    console.error("Error al actualizar salsa en la API:", error)
+    showToast(`Error al actualizar salsa: ${error.message}`, "error")
+    return false
+  }
+}
+
+// Elimina un producto a través de la API.
+async function eliminarSalsaAPI(id) {
+  console.log(`Intentando eliminar salsa con ID: ${id}`)
+  try {
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL_DIP}/${id}`, {
+      method: "DELETE",
+    })
+    console.log(`Respuesta de la API para eliminar: Status ${respuesta.status}, OK: ${respuesta.ok}`)
+    if (!respuesta.ok) {
+      // Si la API devuelve 404, lo tratamos como éxito si el producto ya no existe
+      if (respuesta.status === 404) {
+        console.warn(
+          `API devolvió 404 para DELETE, pero se procede como si fuera exitoso según el feedback del usuario.`,
+        )
+        return true
+      }
+
+      const contentType = respuesta.headers.get("content-type")
+      if (contentType && contentType.includes("application/json")) {
+        const errorBody = await respuesta.json()
+        console.error("Cuerpo del error al eliminar:", errorBody)
+        throw new Error(
+          `Error HTTP: ${respuesta.status}, mensaje: ${errorBody.mensaje || errorBody.message || "Error desconocido"}`,
+        )
+      } else {
+        throw new Error(`Error HTTP: ${respuesta.status}`)
+      }
+    }
+    console.log(`Salsa con ID ${id} eliminado exitosamente de la API.`)
+    return true
+  } catch (error) {
+    console.error("Error al eliminar salsa de la API:", error)
+    showToast(`Error al eliminar salsa: ${error.message}`, "error")
+    return false
+  }
+}
+
 // --- Funciones de Interfaz de Usuario (UI) ---
 
 // Crea y retorna un elemento de tarjeta de producto para la visualización en la página principal.
@@ -676,6 +830,7 @@ async function renderizarModalCarrito() {
 
   contenedorItems.innerHTML = ""
   let montoTotal = 0
+  await renderizarSalsasCarrito();
 
   if (itemsCarrito.length === 0) {
     contenedorItems.innerHTML =
@@ -713,9 +868,9 @@ async function renderizarModalCarrito() {
 // Abre el modal para crear un nuevo producto, limpiando los campos.
 function abrirModalCrear() {
   if (modalTitulo) modalTitulo.textContent = "Crear Producto"
+
   // Limpia todos los campos del formulario
   if (inputId) inputId.value = ""
-  if (inputId) inputId.readOnly = false // Asegura que el ID no esté en solo lectura para nuevos productos (aunque se autogenera)
   if (inputDetalle) inputDetalle.value = ""
   if (inputStock) inputStock.value = ""
   if (inputNombre) inputNombre.value = ""
@@ -728,7 +883,24 @@ function abrirModalCrear() {
   nuevaImagenFile = null
 
   if (productoModal) abrirModal("productoModal")
+
 }
+
+// Abre el modal para crear una nueva salsa, limpiando los campos.
+function abrirModalCrearSalsa() {
+  if (modalTituloSalsa) modalTituloSalsa.textContent = "Crear Salsa"
+  // Limpia todos los campos del formulario
+  if (inputIdSalsa) inputIdSalsa.value = ""
+  if (inputIdSalsa) inputIdSalsa.readOnly = false // Asegura que el ID no esté en solo lectura para nuevos productos (aunque se autogenera)
+  if (inputStockSalsa) inputStockSalsa.value = ""
+  if (inputNombreSalsa) inputNombreSalsa.value = ""
+  if (inputPrecioSalsa) inputPrecioSalsa.value = ""
+
+
+  if (salsaModal) abrirModal("salsaModal")
+
+}
+
 
 // Abre el modal para editar un producto existente, cargando sus datos.
 async function abrirModalEditar(id) {
@@ -784,6 +956,51 @@ async function abrirModalEditar(id) {
   }
 }
 
+// Abre el modal para editar una salsa existente, cargando sus datos.
+async function abrirModalEditarSalsa(id) {
+  try {
+    console.log(`abrirModalEditar: Intentando obtener salsa con ID: ${id}`)
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL_DIP}/${id}`) // Obtiene el producto de la API
+    if (!respuesta.ok) {
+      throw new Error(`Error HTTP! status: ${respuesta.status}`)
+    }
+    const salsa = await respuesta.json()
+
+    if (salsa && salsa.id) {
+      let cleanId = salsa.id
+      // Manejo de IDs que puedan venir con formato inesperado (ej. de Supabase)
+      if (typeof salsa.id === "string" && salsa.id.includes(":")) {
+        cleanId = salsa.id.split(":")[0]
+        console.warn(
+          `abrirModalEditar: ID de la API contiene dos puntos, parseando a: ${cleanId}. Original: ${salsa.id}`,
+        )
+      }
+
+      if (modalTitulo) modalTitulo.textContent = "Editar Salsa"
+      if (inputIdSalsa) inputIdSalsa.value = cleanId
+      if (inputIdSalsa) inputIdSalsa.readOnly = true // El ID no se puede editar
+
+      document.getElementById('editar-id').style.display = "none";
+
+      if (inputNombreSalsa) inputNombreSalsa.value = salsa.salsa_nombre
+      if (inputPrecioSalsa) inputPrecioSalsa.value = salsa.salsa_precio
+      if (inputStockSalsa) inputStockSalsa.value = salsa.salsa_stock
+
+
+
+      salsaActual = { ...salsa, id: cleanId } // Almacena la salsa actual
+
+      if (salsaModal) abrirModal("salsaModal")
+    } else {
+      showToast("Salsa no encontrada para editar.", "error")
+    }
+  } catch (error) {
+    console.error("Error al obtener la salsa  para editar:", error)
+    showToast("No se pudo cargar la salsa para editar.", "error")
+  }
+}
+
+
 // Abre el modal de confirmación para eliminar un producto.
 async function abrirModalEliminar(id) {
   try {
@@ -809,6 +1026,43 @@ async function abrirModalEliminar(id) {
       if (confirm(`¿Estás seguro de que quieres eliminar el producto "${producto.nombre}" (ID: ${cleanId})?`)) {
         console.log("Confirmación de eliminación aceptada. Llamando a eliminarProducto().")
         eliminarProducto() // Llama a la función de eliminación si se confirma
+      } else {
+        console.log("Confirmación de eliminación cancelada.")
+        cerrarYLimpiarModales() // Cierra y limpia si se cancela
+      }
+    } else {
+      showToast("Producto no encontrado para eliminar.", "error")
+    }
+  } catch (error) {
+    console.error("Error al obtener producto para eliminar:", error)
+    showToast("No se pudo cargar el producto para confirmar eliminación.", "error")
+  }
+}
+// Abre el modal de confirmación para eliminar un producto.
+async function abrirModalEliminarSalsa(id) {
+  try {
+    console.log(`abrirModalEliminar: Intentando obtener salsa con ID: ${id}`)
+    const respuesta = await fetch(`${CONFIG.API_BASE_URL_DIP}/${id}`)
+    if (!respuesta.ok) {
+      throw new Error(`Error HTTP! status: ${respuesta.status}`)
+    }
+    const salsa = await respuesta.json()
+
+    if (salsa && salsa.id) {
+      let cleanId = salsa.id
+      if (typeof salsa.id === "string" && salsa.id.includes(":")) {
+        cleanId = salsa.id.split(":")[0]
+        console.warn(
+          `abrirModalEliminar: ID de la API contiene dos puntos, parseando a: ${cleanId}. Original: ${salsa.id}`,
+        )
+      }
+
+      salsaActual = { ...salsa, id: cleanId } // Almacena el producto a eliminar
+
+      // Muestra un cuadro de diálogo de confirmación nativo
+      if (confirm(`¿Estás seguro de que quieres elimar la salsa "${salsa.salsa_nombre}" (ID: ${cleanId})?`)) {
+        console.log("Confirmación de eliminación aceptada. Llamando a eliminarSalsa().")
+        eliminarSalsa() // Llama a la función de eliminación si se confirma
       } else {
         console.log("Confirmación de eliminación cancelada.")
         cerrarYLimpiarModales() // Cierra y limpia si se cancela
@@ -926,6 +1180,73 @@ async function guardarProducto() {
   }
 }
 
+// Guarda una salsa (crea una nueva o modifica una existente).
+async function guardarSalsa() {
+  // Obtiene los valores de los campos del formulario
+  const nombreSalsa = inputNombreSalsa ? inputNombreSalsa.value.trim() : ""
+  const precioSalsa = inputPrecioSalsa ? Number.parseFloat(inputPrecioSalsa.value) : 0
+  const stockSalsa = inputStockSalsa ? Number.parseInt(inputStockSalsa.value) : 0
+
+  // Validación básica de campos obligatorios
+  if (!nombreSalsa || isNaN(precioSalsa) || precioSalsa <= 0 || isNaN(stockSalsa) || stockSalsa < 0) {
+    showToast(
+      "Por favor complete todos los campos obligatorios (Nombre, Precio, Detalle, Stock) correctamente. Precio y Stock deben ser números válidos.",
+      "error",
+    )
+    return
+  }
+
+  // Muestra spinner de carga y deshabilita el botón
+  if (spinnerGuardarSalsa) spinnerGuardarSalsa.style.display = "inline-block"
+  if (textoGuardarSalsa) textoGuardarSalsa.textContent = "Guardando..."
+  if (btnGuardarSalsa) btnGuardarSalsa.disabled = true
+
+
+
+  const salsaData = {
+    // ¡CAMBIO AQUÍ! Los nombres de las propiedades deben coincidir con lo que espera el backend
+    salsa_nombre: nombreSalsa,
+    salsa_precio: precioSalsa,
+    salsa_stock: stockSalsa,
+  };
+
+  try {
+    if (salsaActual && salsaActual.id) {
+      // Si hay un producto actual, se está editando
+      console.log(`guardarSalsa: Intentando actualizar salsa con ID: ${salsaActual.id}`)
+      const success = await modificarSalsaAPI(salsaActual.id, salsaData) // Llama a la API para modificar
+      if (success) {
+        showToast("Producto actualizado exitosamente.")
+        cerrarYLimpiarModales()
+        console.log("Producto actualizado. Re-renderizando tabla de administración.")
+        await renderizarSalsasAdmin() // Vuelve a renderizar la tabla
+      } else {
+        console.log("Fallo al actualizar producto.")
+      }
+    } else {
+      // Si no hay producto actual, se está creando uno nuevo
+      console.log("guardarProducto: Intentando agregar nueva Salsa.")
+      const newProduct = await agregarSalsaAPI(salsaData) // Llama a la API para agregar
+      if (newProduct) {
+        showToast(`Producto agregado exitosamente con ID: ${newProduct.id}.`)
+        cerrarYLimpiarModales()
+        console.log("Producto agregado. Re-renderizando tabla de administración.")
+        await renderizarSalsasAdmin() // Vuelve a renderizar la tabla
+      } else {
+        console.log("Fallo al agregar producto.")
+      }
+    }
+  } catch (error) {
+    console.error("Error al guardar producto:", error)
+    showToast(`Error al guardar producto: ${error.message}`, "error")
+  } finally {
+
+    if (spinnerGuardarSalsa) spinnerGuardarSalsa.style.display = "none"
+    if (textoGuardarSalsa) textoGuardarSalsa.textContent = "Guardar"
+    if (btnGuardarSalsa) btnGuardarSalsa.disabled = false
+  }
+}
+
 // Elimina un producto y su imagen asociada.
 async function eliminarProducto() {
   if (productoActual && productoActual.id) {
@@ -948,6 +1269,29 @@ async function eliminarProducto() {
     }
   } else {
     showToast("No hay producto seleccionado para eliminar.", "error")
+    cerrarYLimpiarModales()
+  }
+}
+
+
+// Elimina una Salsa 
+async function eliminarSalsa() {
+  if (salsaActual && salsaActual.id) {
+    console.log(`eliminarSalsa: Llamando a eliminarSalsaAPI para ID: ${salsaActual.id}`)
+
+
+    const success = await eliminarSalsaAPI(salsaActual.id) // Llama a la API para eliminar el producto
+    console.log(`eliminarSalsa: Resultado de eliminarSalsaAPI: ${success}`)
+    if (success) {
+      showToast("Salsa eliminada exitosamente.")
+      cerrarYLimpiarModales()
+      console.log("eliminarSalsa: Salsa eliminado. Re-renderizando tabla de administración.")
+      await renderizarSalsasAdmin() // Vuelve a renderizar la tabla
+    } else {
+      console.log("eliminarSalsa: Fallo al eliminar salsa.")
+    }
+  } else {
+    showToast("No hay salsa para eliminar.", "error")
     cerrarYLimpiarModales()
   }
 }
@@ -995,6 +1339,49 @@ async function renderizarProductosAdmin() {
   })
   console.log("Renderizado de productos en el panel de administración completado.")
 }
+
+// Renderiza la tabla de salsas en el panel de administración.
+async function renderizarSalsasAdmin() {
+  const cuerpoTabla = document.getElementById("cuerpo-tabla-salsas-admin")
+  if (!cuerpoTabla) return
+
+  console.log("Iniciando renderizado de salsas en el panel de administración...")
+  cuerpoTabla.innerHTML = `<tr><td colspan="7" style="height:6rem; text-align:center; color:var(--texto-mutado);">Cargando salsas...</td></tr>`
+  const salsas = await fetchSalsasAPI() // Obtiene las salsas de la API
+  console.log("Salsas obtenidas de la API para admin:", salsas)
+
+  cuerpoTabla.innerHTML = "" // Limpia el cuerpo de la tabla
+  if (salsas.length === 0) {
+    cuerpoTabla.innerHTML = `<tr><td colspan="7" style="height:6rem; text-align:center; color:var(--texto-mutado);">No hay salsas.</td></tr>`
+    console.log("No hay salsas para mostrar.")
+    return
+  }
+
+  salsas.forEach((salsa) => {
+    let displayId = salsa.id
+    if (typeof salsa.id === "string" && salsa.id.includes(":")) {
+      displayId = salsa.id.split(":")[0]
+    }
+
+    const fila = document.createElement("tr")
+    fila.innerHTML = `
+          <td style="font-weight:500;">${salsa.salsa_nombre}</td>
+          <td class="texto-derecha">$${salsa.salsa_precio}</td>
+          <td class="texto-derecha">${salsa.salsa_stock}</td>
+          <td class="acciones">
+              <button class="boton boton-contorno boton-icono boton-editar-salsa" data-salsa-id="${displayId}">
+                <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </button>
+              <button class="boton boton-destructivo boton-icono boton-eliminar-salsa" data-salsa-id="${displayId}">
+                <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+          </td>
+      `
+    cuerpoTabla.appendChild(fila) // Añade la fila a la tabla
+  })
+  console.log("Renderizado de salsas en el panel de administración completado.")
+}
+
 
 // --- Event Listeners (Manejadores de Eventos) ---
 
@@ -1052,7 +1439,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Lógica específica para la página principal (index.html)
 
-  if (document.getElementById("grilla-viandas")|| document.getElementById("grilla-pastas")|| document.getElementById("grilla-combos")) {
+  if (document.getElementById("grilla-viandas") || document.getElementById("grilla-pastas") || document.getElementById("grilla-combos")) {
     renderizarViandas() // Renderiza los productos en la página principal
 
     // Delegación de eventos para los botones "Agregar al Carrito".
@@ -1073,7 +1460,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     }
 
-        // Delegación de eventos para los botones "Agregar al Carrito".
+    // Delegación de eventos para los botones "Agregar al Carrito".
     if (listaPastas) {
       listaPastas.addEventListener("click", (event) => {
         const addButton = event.target.closest(".boton-agregar-carrito")
@@ -1090,7 +1477,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
     }
-        // Delegación de eventos para los botones "Agregar al Carrito".
+    // Delegación de eventos para los botones "Agregar al Carrito".
     if (listaCombos) {
       listaCombos.addEventListener("click", (event) => {
         const addButton = event.target.closest(".boton-agregar-carrito")
@@ -1113,13 +1500,13 @@ document.addEventListener("DOMContentLoaded", () => {
       renderizarModalCarrito()
       abrirModal("modal-carrito")
     }
-        // Abre el modal del carrito.
+    // Abre el modal del carrito.
     document.getElementById("cart-button-flotante").onclick = () => {
       renderizarModalCarrito()
       abrirModal("modal-carrito")
     }
 
-    
+
     // Abre el modal de inicio de sesión.
     document.getElementById("login-button").onclick = () => abrirModal("modal-login")
 
@@ -1234,13 +1621,17 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (document.getElementById("cuerpo-tabla-productos-admin")) {
     // --- Lógica específica para la página de administración (crud.html) ---
     const cuerpoTablaAdmin = document.getElementById("cuerpo-tabla-productos-admin")
+    const cuerpoTablaAdminSalsas = document.getElementById("cuerpo-tabla-salsas-admin")
+
     // Verifica si el usuario está logueado como administrador
     if (localStorage.getItem("is_admin_logged_in") !== "true") {
       showToast("Acceso denegado. Por favor, inicia sesión.", "error")
       window.location.href = "index.html" // Redirige si no está logueado
       return
     }
+
     renderizarProductosAdmin() // Renderiza la tabla de productos en el admin
+    renderizarSalsasAdmin() // Renderiza la tabla de productos en el admin
 
     // Delegación de eventos para los botones "Editar" y "Eliminar" en la tabla de administración.
     if (cuerpoTablaAdmin) {
@@ -1256,28 +1647,57 @@ document.addEventListener("DOMContentLoaded", () => {
           abrirModalEliminar(productId) // Abre el modal de eliminación
         }
       })
-    }
 
-    // Asigna el manejador de clic al botón "Agregar Nuevo Producto".
-    if (btnAgregarProducto) btnAgregarProducto.onclick = abrirModalCrear
+      // Delegación de eventos para los botones "Editar" y "Eliminar" en la tabla de administración.
+      if (cuerpoTablaAdminSalsas) {
+        cuerpoTablaAdminSalsas.addEventListener("click", (event) => {
+          const editButton = event.target.closest(".boton-editar-salsa")
+          const deleteButton = event.target.closest(".boton-eliminar-salsa")
 
-    // Asigna el manejador de envío al formulario de CRUD de producto.
-    const productForm = document.getElementById("formulario-crud-producto")
-    if (productForm) {
-      productForm.onsubmit = (e) => {
-        e.preventDefault() // Previene el envío por defecto del formulario
-        guardarProducto() // Llama a la función para guardar el producto
+          if (editButton) {
+            const salsaId = Number(editButton.dataset.salsaId)
+            abrirModalEditarSalsa(salsaId) // Abre el modal de edición
+          } else if (deleteButton) {
+            const salsaId = Number(deleteButton.dataset.salsaId)
+            abrirModalEliminarSalsa(salsaId) // Abre el modal de eliminación
+          }
+        })
+      }
+
+
+      // Asigna el manejador de clic al botón "Agregar Nuevo Producto".
+      if (btnAgregarProducto) btnAgregarProducto.onclick = abrirModalCrear
+
+
+      // Asigna el manejador de clic al botón "Agregar Nuevo Producto".
+      if (btnAgregarSalsa) btnAgregarSalsa.onclick = abrirModalCrearSalsa
+
+      // Asigna el manejador de envío al formulario de CRUD de producto.
+      const productForm = document.getElementById("formulario-crud-producto")
+      if (productForm) {
+        productForm.onsubmit = (e) => {
+          e.preventDefault() // Previene el envío por defecto del formulario
+          guardarProducto() // Llama a la función para guardar el producto
+        }
+      }
+      // Asigna el manejador de envío al formulario de CRUD de producto.
+      const salsaForm = document.getElementById("formulario-crud-salsa")
+      if (salsaForm) {
+        salsaForm.onsubmit = (e) => {
+          e.preventDefault() // Previene el envío por defecto del formulario
+          guardarSalsa() // Llama a la función para guardar el producto
+        }
+      }
+
+      // Asigna el manejador de clic al botón "Cerrar Sesión".
+      document.getElementById("boton-logout-admin").onclick = () => {
+        localStorage.removeItem("is_admin_logged_in") // Elimina la marca de logueado
+        showToast("Sesión cerrada.")
+        window.location.href = "index.html" // Redirige a la página principal
       }
     }
-
-    // Asigna el manejador de clic al botón "Cerrar Sesión".
-    document.getElementById("boton-logout-admin").onclick = () => {
-      localStorage.removeItem("is_admin_logged_in") // Elimina la marca de logueado
-      showToast("Sesión cerrada.")
-      window.location.href = "index.html" // Redirige a la página principal
-    }
   }
-})
+});
 
 
 // Manejador de envío del formulario de checkout.
@@ -1369,6 +1789,35 @@ function actualizarTotalCarrito() {
       resumenCarritoDiv.style.display = "none";
     }
   }
+}
+
+async function renderizarSalsasCarrito() {
+  // Limpiar el contenedor antes de renderizar para evitar duplicados
+  salsasExtrasContainer.innerHTML = '';
+  const salsas = await fetchSalsasAPI()
+  if (salsas.length === 0) {
+        salsasExtrasContainer.innerHTML = '<p>No hay salsas disponibles en este momento.</p>';
+        return;
+    }
+
+    salsas.forEach(salsa => {
+        // Inicializar la cantidad de cada salsa a 0 al cargar
+        cantidadesSalsas[salsa.id] = 0;
+
+        const salsaItemDiv = document.createElement('div');
+        salsaItemDiv.classList.add('salsa-item'); // Clase CSS para estilizar si es necesario
+
+        salsaItemDiv.innerHTML = `
+            <label>${salsa.salsa_nombre} ($${salsa.salsa_precio} c/u)</label>
+            <div class="contador-dip">
+                <button type="button" class="boton-cantidad decrementar-salsa" data-salsa-id="${salsa.id}">-</button>
+                <span class="cantidad-salsa" id="cantidad-salsa-${salsa.id}">${cantidadesSalsas[salsa.id]}</span>
+                <button type="button" class="boton-cantidad incrementar-salsa" data-salsa-id="${salsa.id}">+</button>
+            </div>
+        `;
+        salsasExtrasContainer.appendChild(salsaItemDiv);
+    });
+
 }
 
 
